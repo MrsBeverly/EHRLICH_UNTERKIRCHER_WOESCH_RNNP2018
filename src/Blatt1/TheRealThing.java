@@ -32,7 +32,7 @@ public class TheRealThing extends Thread {
 
     public void run() {
         // TODO ...
-        //Lock critical region
+
         try {
             //reading file
             BufferedReader br;
@@ -56,6 +56,7 @@ public class TheRealThing extends Thread {
                     }
 
                 }
+                //Lock critical region
                 synchronized (this) {
                     result += eine_komplizierte_Berechnung(myFloatArray);
                 }
