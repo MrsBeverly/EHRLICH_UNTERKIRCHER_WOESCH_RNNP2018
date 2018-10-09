@@ -1,5 +1,6 @@
 /*WRITTEN BY EHRLICH BEVERLY, UNTERKIRCHER CHRISTOPH AND WÖSCH TIMON*/
 package Blatt1;
+
 import java.io.*;
 
 public class TheRealThing extends Thread {
@@ -31,42 +32,41 @@ public class TheRealThing extends Thread {
 
     public void run() {
         // TODO ...
-        synchronized (this) {
-            try {
-                //reading file
-                BufferedReader br;
-                //Lock critical region
+        //Lock critical region
+        try {
+            //reading file
+            BufferedReader br;
+            FileReader fr = new FileReader(filename);
+            br = new BufferedReader(fr);
 
-                FileReader fr = new FileReader(filename);
-                br = new BufferedReader(fr);
+            br.readLine(); //name
+            br.readLine(); //id
+            int count = Integer.parseInt(String.valueOf(br.readLine())); //count
+            String str = br.readLine(); //actual array
+            String[] myArray = str.split(",");
 
-                br.readLine(); //name
-                br.readLine(); //id
-                int count = Integer.parseInt(String.valueOf(br.readLine())); //count
-                String str = br.readLine(); //actual array
-                String[] myArray = str.split(",");
-
-                //Casting to Float
-                float[] myFloatArray = new float[end - start + 1];
-                float buffer;
-                if (start < count) {
-                    for (int i = start; i <= end; i++) {
-                        if (i < count) {
-                            buffer = Float.parseFloat(myArray[i]);
-                            myFloatArray[i - start] = buffer;
-                        }
-
+            //Casting to Float
+            float[] myFloatArray = new float[end - start + 1];
+            float buffer;
+            if (start < count) {
+                for (int i = start; i <= end; i++) {
+                    if (i < count) {
+                        buffer = Float.parseFloat(myArray[i]);
+                        myFloatArray[i - start] = buffer;
                     }
-                    result += eine_komplizierte_Berechnung(myFloatArray);
-                    fr.close();
-                    br.close();
-                }
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                }
+                synchronized (this) {
+                    result += eine_komplizierte_Berechnung(myFloatArray);
+                }
+                fr.close();
+                br.close();
             }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -65,6 +65,11 @@ public class Aufgabe3 {
 
 
         //Exception Handlig
+        /**
+         * IN ÜBUNG:
+         * BEI SEQUENCENUMBER NEGATIVE WERTE BEACHTEN!!!!
+         * IN JAVA IST ALLES SIGNED; DAHER 3 SHIFT
+         **/
         if ((sequenceNumber > Math.pow(2, 16) - 1) || sequenceNumber < 0 || payload == null) {
             throw new IllegalArgumentException();
         }
