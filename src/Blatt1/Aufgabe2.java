@@ -1,4 +1,4 @@
-/*WRITTEN BY EHRLICH BEVERLY, UNTERKIRCHER CHRISTOPH AND WÖSCH TIMON*/
+//https://github.com/MrsBeverly/EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018.git/*WRITTEN BY EHRLICH BEVERLY, UNTERKIRCHER CHRISTOPH AND WÖSCH TIMON*/
 package Blatt1;
 import java.io.*;
 import java.nio.charset.Charset;
@@ -9,7 +9,7 @@ import java.util.zip.ZipOutputStream;
 public class Aufgabe2 {
 
     public static void main(String[] args) {
-
+        //test comment chris
         if (args.length != 2) {
             System.out.println("Invalid Number of Arguments");
         }
