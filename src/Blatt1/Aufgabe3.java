@@ -10,7 +10,7 @@ public class Aufgabe3 {
         switch (debug) {
             case 0:
 
-                byte[] mesg1 = createMsg(true, true, 1, new byte[]{(byte) 0x1});
+                byte[] mesg1 = createMsg(true, true, 1, new byte[]{(byte) 1});
                 for (int i = 0; i < mesg1.length; i++) {
                     System.out.print(mesg1[i]);
                 }
@@ -18,7 +18,7 @@ public class Aufgabe3 {
                 System.out.println(" ");
                 System.out.println(" ");
 
-                mesg1 = createMsg(true, true, 5, new byte[]{(byte) 0x5});
+                mesg1 = createMsg(true, true, 5, new byte[]{(byte) 5});
                 for (int i = 0; i < mesg1.length; i++) {
                     System.out.print(mesg1[i]);
                 }
@@ -27,7 +27,7 @@ public class Aufgabe3 {
                 System.out.println(" ");
 
 
-                mesg1 = createMsg(true, true, 5, new byte[]{(byte) 0x5d, 0x6a, 0x7c, 0x4b, 0x24, 0x42});
+                mesg1 = createMsg(true, true, 5, new byte[]{(byte) 42, 35, 17, 20, 56, 65});
                 for (int i = 0; i < mesg1.length; i++) {
                     System.out.print(mesg1[i]);
                 }
@@ -36,7 +36,7 @@ public class Aufgabe3 {
 
 
             case 1:
-                mesg1 = createMsg(true, true, 65536, new byte[]{(byte) 0x5d, 0x6a, 0x7c, 0x4b, 0x24, 0x42});
+                mesg1 = createMsg(true, true, 65536, new byte[]{(byte) 42, 35, 17, 20, 56, 65});
                 for (int i = 0; i < mesg1.length; i++) {
                     System.out.print(mesg1[i]);
                 }
@@ -44,7 +44,7 @@ public class Aufgabe3 {
 
 
             case 2:
-                mesg1 = createMsg(true, true, -4, new byte[]{(byte) 0x5d, 0x6a, 0x7c, 0x4b, 0x24, 0x42});
+                mesg1 = createMsg(true, true, -4, new byte[]{(byte) 42, 35, 17, 20, 56, 65});
                 for (int i = 0; i < mesg1.length; i++) {
                     System.out.print(mesg1[i]);
                 }
@@ -127,10 +127,10 @@ public class Aufgabe3 {
 
         // 16 bit SequenceNumber       --> ---- ---- ---- ---- xxxx xxxx xxxx xxxx
         BitSet tmpBitSet = new BitSet().valueOf(new long[]{sequenceNumber});
-        int runIdx = 16;
+
         for (int i = 0; i < tmpBitSet.length(); i++) {
             if (tmpBitSet.get(i)) {
-                myBitSet.set(runIdx + i);
+                myBitSet.set(16+i);
             }
         }
         if (debug) {
@@ -148,10 +148,9 @@ public class Aufgabe3 {
 
         BitSet payloadBitSet = new BitSet().valueOf(payload);
         tmpBitSet = new BitSet().valueOf(new long[]{payloadBitSet.length()});
-        runIdx = 32;
         for (int i = 0; i < tmpBitSet.length(); i++) {
             if (tmpBitSet.get(i)) {
-                myBitSet.set(runIdx + i);
+                myBitSet.set(32 + i);
             }
 
         }
