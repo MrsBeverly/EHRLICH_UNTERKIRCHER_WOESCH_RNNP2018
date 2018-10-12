@@ -29,8 +29,8 @@ public class Aufgabe3 {
         }
     }
 
-    public class Main {
-        public /*static*/ void main(String[] args) {
+    public static class Main {
+        public static void main(String[] args) {
             Stack<Integer> sharedStack = new Stack<>();
             // TODO: implement
         }
