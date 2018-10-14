@@ -14,11 +14,14 @@ public class Producer extends Thread {
     public void run() {
         // TODO: implement!
 
+        //generating values
         for(int i=0; i<100; i++)
         {
+            //pushing them to the stack
             synchronized (this) {
                 stack.push(i);
             }
+            //thread is tired it goes to sleep
             if(stack.size()==10) {
                 try {
                     Thread.sleep(100);
@@ -27,6 +30,7 @@ public class Producer extends Thread {
                 }
             }
         }
+        //thread has finished and throws the flag
         flag.push(true);
         System.out.println("Producer has thrown the flag");
     }

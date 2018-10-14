@@ -7,13 +7,16 @@ public class Main extends Thread{
         Stack<Integer> sharedStack = new Stack<>();
         // TODO: implement
 
+        //Creating a flag to stop the threads
         Stack<Boolean> sharedflag = new Stack<>();
 
+        //create threads and start them
         Producer pr = new Producer(sharedStack,sharedflag);
         Consumer cs = new Consumer(sharedStack,sharedflag);
         cs.start();
         pr.start();
 
+        //threads join
         try {
             pr.join();
             cs.join();

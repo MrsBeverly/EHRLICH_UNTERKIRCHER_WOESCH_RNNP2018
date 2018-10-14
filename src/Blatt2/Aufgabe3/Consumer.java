@@ -19,21 +19,26 @@ public class Consumer extends Thread {
         // TODO: implement
         int result = 0;
 
+        //while the flag has not been thrown
         while(flag.empty())
         {
+            //checking if stack is not empty
             if(!stack.empty())
             {
+                //summing up the values
                 synchronized (this) {
                     result += stack.pop();
                 }
                 System.out.println(result);
             }
+            //thread is tired it goes to sleep
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        //finishing up of the flag has been thrown
         while (!stack.empty())
         {
             synchronized (this) {
