@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.Stack;
 
 /*WRITTEN BY EHRLICH BEVERLY, UNTERKIRCHER CHRISTOPH AND WÖSCH TIMON*/
-
+//test chris
 public class Consumer extends Thread {
     private Stack<Integer> stack;
     private Stack<Boolean> flag;
