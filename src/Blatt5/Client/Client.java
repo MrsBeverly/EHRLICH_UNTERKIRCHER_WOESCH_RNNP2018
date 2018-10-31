@@ -79,10 +79,10 @@ public class Client {
 
 
 
-    public void connect(String host, int port) throws IOException {
+   // public void connect(String host, int port) throws IOException {
 //…
-        readResponseLine();
-    }
+   //     readResponseLine();
+   // }
 
 
 
