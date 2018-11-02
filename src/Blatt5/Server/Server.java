@@ -39,7 +39,11 @@ public class Server {
                         outToClient.flush();
                         break;
                     case "STAT":
-                        outToClient.writeChars("+OK " + SampleDataBase.messages.size() + " 51197\r");
+                        outToClient.writeChars("+OK ");
+                        outToClient.write(6);
+                        outToClient.writeChars(" ");
+                        outToClient.write(51197);
+                        outToClient.writeChars("\r");
                         outToClient.flush();
                         break;
                     default: break;
