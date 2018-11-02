@@ -119,13 +119,10 @@ public class Client {
                 continue; //no process of multiline headers
             }
             int colonPosition = response.indexOf(":");
-
-
             headerName = response.substring(0, colonPosition);
             String headerValue;
             if (headerName.length() > colonPosition) {
                 headerValue = response.substring(colonPosition + 2);
-                System.out.println("Header Test");
             } else {
                 headerValue = "";
             }
@@ -139,7 +136,7 @@ public class Client {
 // process body
         StringBuilder bodyBuilder = new StringBuilder();
         while (!(response = readResponseLine()).equals(".")) {
-            bodyBuilder.append(response + "\n");
+            bodyBuilder.append(response + "\n ");
         }
         return new Message(headers, bodyBuilder.toString());
     }
@@ -149,13 +146,11 @@ public class Client {
 
         // get number of messages in mailbox
         int numOfMessages = getNumberOfNewMessages();
-if(debug){System.out.println("Flag 1");}
+
         // create ArrayList and add all messages
         List<Message> messageList = new ArrayList<Message>();
-
-
-        for (int i = 0; i < numOfMessages; i++) {
-            messageList.add(getMessage(i+1));
+        for (int i = 1; i <= numOfMessages; i++) {
+            messageList.add(getMessage(i));
         }
 
         return messageList;
