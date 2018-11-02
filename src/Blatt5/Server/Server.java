@@ -1,5 +1,7 @@
 package Blatt5.Server;
 
+import Blatt5.SampleDataBase;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -19,13 +21,29 @@ public class Server {
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
+            outToClient.writeChars("+OK Connected\r\n");
+            outToClient.flush();
 
+            while (true) {
+                clientSentence = inFromClient.readLine();
 
-
-            clientSentence = inFromClient.readLine();
-
-            capitalizedSentence = clientSentence.toUpperCase() + '\n';
-            outToClient.writeBytes(capitalizedSentence);
+                switch (clientSentence.split(" ")[0])
+                {
+                    case "USER":
+                        outToClient.writeChars("+OK User Accepted\r\n");
+                        outToClient.flush();
+                        break;
+                    case "PASS":
+                        outToClient.writeChars("+OK Password Accepted\r\n");
+                        outToClient.flush();
+                        break;
+                    case "STAT":
+                        outToClient.writeChars("+OK " + SampleDataBase.messages.size() + " 51197\r\n");
+                        outToClient.flush();
+                        break;
+                    default: break;
+                }
+            }
         }
     }
 
