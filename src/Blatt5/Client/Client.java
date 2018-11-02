@@ -17,7 +17,7 @@ public class Client {
     private BufferedReader reader;
     private BufferedWriter writer;
 
-    private static final int DEFAULT_PORT = 110;
+    private static final int DEFAULT_PORT = 6789;
 
 
 
@@ -161,7 +161,8 @@ public class Client {
     public static void main(String[] args) throws IOException {
         Client myClient = new Client();
         //myClient.setDebug(true);
-        myClient.connect("pop.a1.net");
+        //myClient.connect("pop.a1.net");
+        myClient.connect("localhost");
         myClient.login("beverly-ehrlich@aon.at", "Beverly1701Chris");
         System.out.println("Number of new emails: " + myClient.getNumberOfNewMessages());
         List<Message> messages = myClient.getMessages();
