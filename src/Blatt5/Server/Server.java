@@ -47,6 +47,10 @@ public class Server {
                         outToClient.writeBytes(".\r");
                         outToClient.flush();
                         break;
+                    case "QUIT":
+                        //goto UPDATE STATE
+                        // TERMINATE
+                        break;
                     default: break;
                 }
             }
