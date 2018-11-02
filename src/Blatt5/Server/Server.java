@@ -27,11 +27,9 @@ public class Server {
 
             if(clientSentence =="STAT")
             {
-                outToClient.writeChars(SampleDataBase.messages.toArray().toString());
+                outToClient.writeChars("+OK " + SampleDataBase.messages.size() + " ??");
             }
 
-            capitalizedSentence = clientSentence.toUpperCase() + '\n';
-            outToClient.writeBytes(capitalizedSentence);
         }
     }
 
