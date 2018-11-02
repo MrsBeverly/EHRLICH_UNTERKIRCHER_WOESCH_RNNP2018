@@ -78,7 +78,7 @@ public class Client {
         if (debug) {
             System.out.println("DEBUG [out]: " + command);
         }
-        writer.write(command + "\n");
+        writer.write(command + "\r\n");
         writer.flush();
         return readResponseLine();
     }
