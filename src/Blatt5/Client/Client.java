@@ -17,7 +17,7 @@ public class Client {
     private BufferedReader reader;
     private BufferedWriter writer;
 
-    private static final int DEFAULT_PORT = 6789;
+    private static final int DEFAULT_PORT = 110;
 
 
 
@@ -118,7 +118,10 @@ public class Client {
             if (response.startsWith("\t")) {
                 continue; //no process of multiline headers
             }
+           if(response.indexOf(":")==-1){continue;}
             int colonPosition = response.indexOf(":");
+
+
             headerName = response.substring(0, colonPosition);
             String headerValue;
             if (headerName.length() > colonPosition) {
@@ -161,8 +164,8 @@ public class Client {
     public static void main(String[] args) throws IOException {
         Client myClient = new Client();
         //myClient.setDebug(true);
-        //myClient.connect("pop.a1.net");
-        myClient.connect("localhost");
+        myClient.connect("pop.a1.net");
+        //myClient.connect("localhost");
         myClient.login("beverly-ehrlich@aon.at", "Beverly1701Chris");
         System.out.println("Number of new emails: " + myClient.getNumberOfNewMessages());
         List<Message> messages = myClient.getMessages();
