@@ -21,24 +21,25 @@ public class Server {
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
-            outToClient.writeChars("+OK Connected\r\n");
+            outToClient.writeChars("+OK Connected\r");
             outToClient.flush();
 
             while (true) {
+
                 clientSentence = inFromClient.readLine();
 
                 switch (clientSentence.split(" ")[0])
                 {
                     case "USER":
-                        outToClient.writeChars("+OK User Accepted\r\n");
+                        outToClient.writeChars("+OK USER Accepted\r");
                         outToClient.flush();
                         break;
                     case "PASS":
-                        outToClient.writeChars("+OK Password Accepted\r\n");
+                        outToClient.writeChars("+OK PASS Accepted\r");
                         outToClient.flush();
                         break;
                     case "STAT":
-                        outToClient.writeChars("+OK " + SampleDataBase.messages.size() + " 51197\r\n");
+                        outToClient.writeChars("+OK " + SampleDataBase.messages.size() + " 51197\r");
                         outToClient.flush();
                         break;
                     default: break;
