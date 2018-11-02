@@ -1,5 +1,7 @@
 package Blatt5.Server;
 
+import Blatt5.SampleDataBase;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -19,7 +21,14 @@ public class Server {
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
+            outToClient.writeChars("+OK Connected\r\n");
+
             clientSentence = inFromClient.readLine();
+
+            if(clientSentence =="STAT")
+            {
+                outToClient.writeChars(SampleDataBase.messages.toArray().toString());
+            }
 
             capitalizedSentence = clientSentence.toUpperCase() + '\n';
             outToClient.writeBytes(capitalizedSentence);

@@ -12,7 +12,7 @@ public class Client {
 
     private Socket socket;
 
-    private boolean debug = false;
+    private boolean debug = true;
 
     private BufferedReader reader;
     private BufferedWriter writer;
@@ -176,4 +176,3 @@ public class Client {
 
 //End Class
 }
-
