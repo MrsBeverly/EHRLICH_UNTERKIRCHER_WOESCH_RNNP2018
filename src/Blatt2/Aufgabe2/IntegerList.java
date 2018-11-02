@@ -30,6 +30,7 @@ public class IntegerList {
         if (index > size - 1) {
             throw new NullPointerException();
         }
+        //negative index
 
         return data[index];
     }

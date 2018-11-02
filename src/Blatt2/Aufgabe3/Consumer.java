@@ -27,6 +27,8 @@ public class Consumer extends Thread {
             {
                 //summing up the values
                 synchronized (this) {
+                    //Stack ist selbst schon synchronized - man braucht es also nicht extra synchronizen
+                    //condition wait wenn stack leer (condition auf stackgröße)
                     result += stack.pop();
                 }
                 System.out.println(result);
@@ -38,7 +40,7 @@ public class Consumer extends Thread {
                 e.printStackTrace();
             }
         }
-        //finishing up of the flag has been thrown
+        //finishing up after the flag has been thrown
         while (!stack.empty())
         {
             synchronized (this) {
