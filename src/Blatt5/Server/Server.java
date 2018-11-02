@@ -27,7 +27,7 @@ public class Server {
 
             if(clientSentence =="STAT")
             {
-                outToClient.writeChars("+OK " + SampleDataBase.messages.size() + " ??");
+                outToClient.writeChars("+OK " + SampleDataBase.messages.size() + " 51197");
             }
 
         }
