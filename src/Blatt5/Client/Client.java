@@ -136,7 +136,7 @@ public class Client {
 // process body
         StringBuilder bodyBuilder = new StringBuilder();
         while (!(response = readResponseLine()).equals(".")) {
-            bodyBuilder.append(response + "\n");
+            bodyBuilder.append(response + "\n ");
         }
         return new Message(headers, bodyBuilder.toString());
     }
@@ -149,8 +149,8 @@ public class Client {
 
         // create ArrayList and add all messages
         List<Message> messageList = new ArrayList<Message>();
-        for (int i = 0; i < numOfMessages; i++) {
-            messageList.add(getMessage(i + 1));
+        for (int i = 1; i <= numOfMessages; i++) {
+            messageList.add(getMessage(i));
         }
 
         return messageList;
