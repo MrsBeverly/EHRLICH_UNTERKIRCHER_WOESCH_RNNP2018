@@ -9,9 +9,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
+    private final String positiveResponse = "+OK ";
+    private final String negativeResponse = "-ERR ";
+    private final String endOfResponse = "\r";
+    private final String terminationCharacter = ".";
 
     public static void main(String argv[]) throws Exception {
         String clientSentence;
+        Server server = new Server();
 
         //new server with port 6789
         ServerSocket welcomeSocket = new ServerSocket(6789);
@@ -25,7 +30,9 @@ public class Server {
             DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
             //notify client that the connection has succeeded
-            outToClient.writeBytes("+OK Connected\r");
+            outToClient.writeBytes(server.sendPositiveResponse(
+                    "Connected"
+            ));
             outToClient.flush();
 
             while (true) {
@@ -38,23 +45,36 @@ public class Server {
                 {
                     case "USER":
                         //checking if user is valid (not implemented)
-                        outToClient.writeBytes("+OK USER Accepted\r");
+                        outToClient.writeBytes(server.sendPositiveResponse(
+                                "USER Accepted"
+                        ));
                         outToClient.flush();
                         break;
                     case "PASS":
                         //checking if the password for the user is valid (not implemented)
-                        outToClient.writeBytes("+OK PASS Accepted\r");
+                        outToClient.writeBytes(server.sendPositiveResponse(
+                                "PASS Accepted"
+                        ));
                         outToClient.flush();
                         break;
                     case "STAT":
-                        //returning number of messages (and the size in Bits)
-                        outToClient.writeBytes("+OK " + SampleDataBase.messages.size() + " 51197\r");
+                        //returning number of messages and the size in Bits (???)
+                        outToClient.writeBytes(
+                                // example : +OK 6 51197
+                                server.sendPositiveResponse(SampleDataBase.messages.size() + " 51197"
+                                ));
                         outToClient.flush();
                         break;
                     case "RETR":
-                        //returning a specific massage
-                        outToClient.writeBytes("+OK "+ SampleDataBase.messages.get(Integer.valueOf(clientSentence.split(" ")[1])-1) +"\r");
-                        outToClient.writeBytes(".\r");
+                        //returning a specific message
+                        outToClient.writeBytes(server.sendPositiveResponse(
+                                //returning the data of a message
+                                SampleDataBase.messages.get(Integer.valueOf(clientSentence.split(" ")[1])-1
+                                )));
+                        //termination of the Response
+                        outToClient.writeBytes(
+                                server.sendTerminationCharacter()
+                        );
                         outToClient.flush();
                         break;
                     case "QUIT":
@@ -67,4 +87,18 @@ public class Server {
         }
     }
 
+    protected String sendPositiveResponse(String response)
+    {
+        return positiveResponse+response+endOfResponse;
+    }
+
+    protected String sendNegativeResponse(String response)
+    {
+        return negativeResponse+response+endOfResponse;
+    }
+
+    protected String sendTerminationCharacter()
+    {
+        return terminationCharacter +endOfResponse;
+    }
 }
