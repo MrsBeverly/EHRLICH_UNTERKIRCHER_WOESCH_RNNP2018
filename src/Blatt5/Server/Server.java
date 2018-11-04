@@ -1,3 +1,4 @@
+/*WRITTEN BY EHRLICH BEVERLY, UNTERKIRCHER CHRISTOPH AND WÖSCH TIMON*/
 package Blatt5.Server;
 
 import Blatt5.SampleDataBase;
@@ -8,11 +9,15 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
-    private final String positiveResponse = "+OK ";
-    private final String negativeResponse = "-ERR ";
-    private final String endOfResponse = "\r";
-    private final String terminationCharacter = ".";
+public class Server extends Thread {
+    private final static String positiveResponse = "+OK ";
+    private final static String negativeResponse = "-ERR ";
+    private final static String endOfResponse = "\r";
+    private final static String terminationCharacter = ".";
+
+    public void run(Socket connectionSocket) {
+
+    }
 
     public static void main(String argv[]) throws Exception {
         String clientSentence;
@@ -30,10 +35,7 @@ public class Server {
             DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
             //notify client that the connection has succeeded
-            outToClient.writeBytes(server.sendPositiveResponse(
-                    "Connected"
-            ));
-            outToClient.flush();
+            server.sendPositiveResponse(outToClient, "Connected");
 
             while (true) {
 
@@ -41,64 +43,48 @@ public class Server {
                 clientSentence = inFromClient.readLine();
 
                 // getting the Command from the clientSentence
-                switch (clientSentence.split(" ")[0])
-                {
+                switch (clientSentence.split(" ")[0]) {
                     case "USER":
                         //checking if user is valid (not implemented)
-                        outToClient.writeBytes(server.sendPositiveResponse(
-                                "USER Accepted"
-                        ));
-                        outToClient.flush();
+                        server.sendPositiveResponse(outToClient, "USER Accepted");
                         break;
                     case "PASS":
                         //checking if the password for the user is valid (not implemented)
-                        outToClient.writeBytes(server.sendPositiveResponse(
-                                "PASS Accepted"
-                        ));
-                        outToClient.flush();
+                        server.sendPositiveResponse(outToClient, "PASS Accepted");
                         break;
                     case "STAT":
                         //returning number of messages and the size in Bits (???)
-                        outToClient.writeBytes(
-                                // example : +OK 6 51197
-                                server.sendPositiveResponse(SampleDataBase.messages.size() + " 51197"
-                                ));
-                        outToClient.flush();
+                        server.sendPositiveResponse(outToClient, SampleDataBase.messages.size() + " 51197");
                         break;
                     case "RETR":
                         //returning a specific message
-                        outToClient.writeBytes(server.sendPositiveResponse(
-                                //returning the data of a message
-                                SampleDataBase.messages.get(Integer.valueOf(clientSentence.split(" ")[1])-1
-                                )));
+                        server.sendPositiveResponse(outToClient, SampleDataBase.messages.get(Integer.valueOf(clientSentence.split(" ")[1]) - 1));
                         //termination of the Response
-                        outToClient.writeBytes(
-                                server.sendTerminationCharacter()
-                        );
-                        outToClient.flush();
+                        server.sendTerminationCharacter(outToClient);
                         break;
                     case "QUIT":
                         //goto UPDATE STATE
                         // TERMINATE
                         break;
-                    default: break;
+                    default:
+                        break;
                 }
             }
         }
     }
 
-    protected String sendPositiveResponse(String response)
-    {
-        return positiveResponse+response+endOfResponse;
+    public void sendPositiveResponse(DataOutputStream outToClient, String response) throws Exception {
+        outToClient.writeBytes(positiveResponse + response + endOfResponse);
+        outToClient.flush();
     }
 
-    protected String sendNegativeResponse(String response)
-    {
-        return negativeResponse+response+endOfResponse;
+    public void sendNegativeResponse(DataOutputStream outToClient, String response) throws Exception {
+        outToClient.writeBytes(negativeResponse + response + endOfResponse);
+        outToClient.flush();
     }
 
-    protected String sendTerminationCharacter()
-    {
-        return terminationCharacter +endOfResponse;
+    public void sendTerminationCharacter(DataOutputStream outToClient) throws Exception {
+        outToClient.writeBytes(terminationCharacter + endOfResponse);
+        outToClient.flush();
     }
 }

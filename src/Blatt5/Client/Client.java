@@ -1,3 +1,4 @@
+/*WRITTEN BY EHRLICH BEVERLY, UNTERKIRCHER CHRISTOPH AND WÖSCH TIMON*/
 package Blatt5.Client;
 import java.io.*;
 import java.net.InetSocketAddress;
