@@ -52,6 +52,7 @@ public class Server extends Thread {
 
             flag=false;
 
+            //Transaction State
             while (!flag){
                 //reading what the client has to say
                 clientSentence = inFromClient.readLine();
@@ -64,9 +65,14 @@ public class Server extends Thread {
                         break;
                     case "RETR":
                         //returning a specific message
-                        sendPositiveResponse(outToClient, SampleDataBase.messages.get(Integer.valueOf(clientSentence.split(" ")[1]) - 1));
-                        //termination of the Response
-                        sendTerminationCharacter(outToClient);
+                        try {
+                            sendPositiveResponse(outToClient, SampleDataBase.messages.get(Integer.valueOf(clientSentence.split(" ")[1]) - 1));
+                            //termination of the Response
+                            sendTerminationCharacter(outToClient);
+                        }catch(Exception e){
+                            //message not found
+                            sendNegativeResponse(outToClient,"no such message");
+                        }
                         break;
                     case "QUIT":
                         //goto UPDATE STATE
@@ -83,7 +89,6 @@ public class Server extends Thread {
     }
 
     public static void main(String argv[]) throws Exception {
-        String clientSentence;
         Server server;
 
         //new server with port 6789
