@@ -14,14 +14,77 @@ public class Server extends Thread {
     private final static String negativeResponse = "-ERR ";
     private final static String endOfResponse = "\r";
     private final static String terminationCharacter = ".";
+    private final Socket connectionSocket;
 
-    public void run(Socket connectionSocket) {
+    public Server(Socket connection_Socket){
+        connectionSocket = connection_Socket;
+    }
 
+    public void run(){
+        String clientSentence;
+        boolean flag = false;
+
+        try {
+            //open input and output stream
+            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+
+            //notify client that the connection has succeeded
+            sendPositiveResponse(outToClient, "Connected");
+
+            while(!flag){
+                clientSentence = inFromClient.readLine();
+                //checking if user is valid (not implemented)
+                sendPositiveResponse(outToClient, "USER Accepted");
+                //sendNegativeResponse(outToClient, "USER does not exist");
+                flag=true;
+            }
+
+            flag=false;
+
+            while(!flag){
+                clientSentence = inFromClient.readLine();
+                //checking if the password for the user is valid (not implemented)
+                sendPositiveResponse(outToClient, "PASS Accepted");
+                //sendNegativeResponse(outToClient, "PASS is not correct");
+                flag=true;
+            }
+
+            flag=false;
+
+            while (!flag){
+                //reading what the client has to say
+                clientSentence = inFromClient.readLine();
+
+                // getting the Command from the clientSentence
+                switch (clientSentence.split(" ")[0]) {
+                    case "STAT":
+                        //returning number of messages and the size in Bits (???)
+                        sendPositiveResponse(outToClient, SampleDataBase.messages.size() + " 51197");
+                        break;
+                    case "RETR":
+                        //returning a specific message
+                        sendPositiveResponse(outToClient, SampleDataBase.messages.get(Integer.valueOf(clientSentence.split(" ")[1]) - 1));
+                        //termination of the Response
+                        sendTerminationCharacter(outToClient);
+                        break;
+                    case "QUIT":
+                        //goto UPDATE STATE
+                        // TERMINATE
+                        flag=true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }catch (Exception e){
+            System.out.println("Exception = " + e);
+        }
     }
 
     public static void main(String argv[]) throws Exception {
         String clientSentence;
-        Server server = new Server();
+        Server server;
 
         //new server with port 6789
         ServerSocket welcomeSocket = new ServerSocket(6789);
@@ -29,47 +92,9 @@ public class Server extends Thread {
         while (true) {
             //waiting for a new client
             Socket connectionSocket = welcomeSocket.accept();
-
-            //open input and output stream
-            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-
-            //notify client that the connection has succeeded
-            server.sendPositiveResponse(outToClient, "Connected");
-
-            while (true) {
-
-                //reading what the client has to say
-                clientSentence = inFromClient.readLine();
-
-                // getting the Command from the clientSentence
-                switch (clientSentence.split(" ")[0]) {
-                    case "USER":
-                        //checking if user is valid (not implemented)
-                        server.sendPositiveResponse(outToClient, "USER Accepted");
-                        break;
-                    case "PASS":
-                        //checking if the password for the user is valid (not implemented)
-                        server.sendPositiveResponse(outToClient, "PASS Accepted");
-                        break;
-                    case "STAT":
-                        //returning number of messages and the size in Bits (???)
-                        server.sendPositiveResponse(outToClient, SampleDataBase.messages.size() + " 51197");
-                        break;
-                    case "RETR":
-                        //returning a specific message
-                        server.sendPositiveResponse(outToClient, SampleDataBase.messages.get(Integer.valueOf(clientSentence.split(" ")[1]) - 1));
-                        //termination of the Response
-                        server.sendTerminationCharacter(outToClient);
-                        break;
-                    case "QUIT":
-                        //goto UPDATE STATE
-                        // TERMINATE
-                        break;
-                    default:
-                        break;
-                }
-            }
+            //start new Thread and give him the connectionSocket
+            server = new Server(connectionSocket);
+            server.start();
         }
     }
 
