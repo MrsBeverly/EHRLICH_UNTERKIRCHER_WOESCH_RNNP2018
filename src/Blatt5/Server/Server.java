@@ -60,6 +60,7 @@ public class Server extends Thread {
                 case "STAT":
                     //returning number of messages and the size in Bits (???)
                     sendPositiveResponse(outToClient, SampleDataBase.messages.size() + " size?");
+
                     break;
                 case "RETR":
                     //returning a specific message
@@ -71,8 +72,10 @@ public class Server extends Thread {
                     } else{
                         sendNegativeResponse(outToClient, "no such message");
                     }
+
                     break;
                 case "LIST":
+                    //listing messages
                     if(split_clientSentence.length==1){
                         //list all
                         sendPositiveResponse(outToClient, SampleDataBase.messages.size() + " messages " + "size?");
@@ -92,6 +95,7 @@ public class Server extends Thread {
 
                     break;
                 case "TOP":
+                    //listing a specific starting symbols of a message
                     idx = Integer.valueOf(split_clientSentence[1]);
                     count = Integer.valueOf(split_clientSentence[2]);
 
@@ -111,6 +115,17 @@ public class Server extends Thread {
                     flag = true;
 
                     break;
+                case "DELE":
+                //removing a specific message
+                idx = Integer.valueOf(split_clientSentence[1]);
+                if(idx<=SampleDataBase.messages.size()){
+                    //SampleDataBase.messages.remove(idx);
+                    sendPositiveResponse(outToClient, "message deleted");
+                } else{
+                    sendNegativeResponse(outToClient, "no such message");
+                }
+
+                break;
                 default:
 
                     break;
