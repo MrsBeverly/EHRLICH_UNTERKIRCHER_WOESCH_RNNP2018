@@ -100,6 +100,7 @@ public class Server extends Thread {
                     case "QUIT":
                         //goto UPDATE STATE
                         // TERMINATE
+                        sendPositiveResponse(outToClient, "See you later :)");
                         flag = true;
                         break;
                     default:
