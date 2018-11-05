@@ -165,8 +165,31 @@ public class Client {
         }catch(Exception e){
         }
 
+        myClient.top(2,100);
+        try{
+            myClient.top(60,100);
+        }catch(Exception e){
+
+        }
+
         myClient.logout();
         myClient.disconnect();
+    }
+
+    public String top(int idx, int count) throws IOException{
+        String str = "";
+        Boolean flag = false;
+
+        sendCommand("TOP " + idx + " " + count);
+        while (!flag) {
+            str += readResponseLine();
+
+            if(str.endsWith(".")){
+                flag=true;
+            }
+        }
+
+        return str;
     }
 
     public String list(int idx) throws IOException {
@@ -177,6 +200,7 @@ public class Client {
         String str = sendCommand("LIST");
         String[] list = new String[str.split( "").length];
         int numberOfMessages = Integer.valueOf(str.split(" ")[1]);
+
         for(int i=0; i<numberOfMessages; i++)
         {
             list[i] = readResponseLine();

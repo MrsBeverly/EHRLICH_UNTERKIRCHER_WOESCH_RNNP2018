@@ -33,82 +33,144 @@ public class Server extends Thread {
             //notify client that the connection has succeeded
             sendPositiveResponse(outToClient, "Connected");
 
-            while (!flag) {
-                clientSentence = inFromClient.readLine();
-                //checking if user is valid (not implemented)
-                sendPositiveResponse(outToClient, "USER Accepted");
-                //sendNegativeResponse(outToClient, "USER does not exist");
-                flag = true;
-            }
-
-            flag = false;
-
-            while (!flag) {
-                clientSentence = inFromClient.readLine();
-                //checking if the password for the user is valid (not implemented)
-                sendPositiveResponse(outToClient, "PASS Accepted");
-                //sendNegativeResponse(outToClient, "PASS is not correct");
-                flag = true;
-            }
-
-            flag = false;
+            //Authorization State
+            authorizationState(inFromClient, outToClient, null);
 
             //Transaction State
-            while (!flag) {
-                //reading what the client has to say
-                clientSentence = inFromClient.readLine();
-                split_clientSentence=clientSentence.split(" ");
+            transactionState(inFromClient, outToClient, null);
 
-                // getting the Command from the clientSentence
-                switch (split_clientSentence[0]) {
-                    case "STAT":
-                        //returning number of messages and the size in Bits (???)
-                        sendPositiveResponse(outToClient, SampleDataBase.messages.size() + " size?");
-                        break;
-                    case "RETR":
-                        //returning a specific message
-                        try {
-                            sendPositiveResponse(outToClient, "size?");
-                            sendResponse(outToClient, SampleDataBase.messages.get(Integer.valueOf(split_clientSentence[1]) - 1));
-                            //termination of the Response
-                            sendTerminationCharacter(outToClient);
-                        } catch (Exception e) {
-                            //message not found
-                            sendNegativeResponse(outToClient, "no such message");
-                        }
-                        break;
-                    case "LIST":
-                        if(split_clientSentence.length==1){
-                            //list all
-                            sendPositiveResponse(outToClient, SampleDataBase.messages.size() + " messages " + "size?");
-                            for(int i=0; i<SampleDataBase.messages.size(); i++){
-                                sendResponse(outToClient, i+1 + " " + "size?");
-                            }
-                            sendTerminationCharacter(outToClient);
-                        }else{
-                            //list specific
-                            if(Integer.valueOf(split_clientSentence[1])<SampleDataBase.messages.size()) {
-                                sendPositiveResponse(
-                                        outToClient,
-                                        Integer.valueOf(split_clientSentence[1]) + " " + "size?"
-                                );
-                            }else{
-                                sendNegativeResponse(outToClient, "no such message, only " + split_clientSentence[1] + " messages in maildrop");
-                            }
-                        }
-                        break;
-                    case "QUIT":
-                        //goto UPDATE STATE
-                        // TERMINATE
-                        sendPositiveResponse(outToClient, "See you later :)");
-                        flag = true;
-                        break;
-                    default:
-                        break;
-                }
-            }
         } catch (Exception e) {
             System.out.println("Exception = " + e);
+        }
+    }
+
+    private void transactionState(BufferedReader inFromClient, DataOutputStream outToClient, String inClientSentence) throws Exception {
+        String clientSentence;
+        String[] split_clientSentence;
+        Boolean flag = false;
+        int idx, count;
+
+        // Transaction State actions
+        while (!flag) {
+            //reading what the client has to say
+            clientSentence = inFromClient.readLine();
+            split_clientSentence=clientSentence.split(" ");
+
+            switch (split_clientSentence[0]) {
+                case "STAT":
+                    //returning number of messages and the size in Bits (???)
+                    sendPositiveResponse(outToClient, SampleDataBase.messages.size() + " size?");
+                    break;
+                case "RETR":
+                    //returning a specific message
+                    idx = Integer.valueOf(split_clientSentence[1]);
+                    if(idx<=SampleDataBase.messages.size()){
+                        sendPositiveResponse(outToClient, "size?");
+                        sendResponse(outToClient, SampleDataBase.messages.get(idx - 1));
+                        sendTerminationCharacter(outToClient);
+                    } else{
+                        sendNegativeResponse(outToClient, "no such message");
+                    }
+                    break;
+                case "LIST":
+                    if(split_clientSentence.length==1){
+                        //list all
+                        sendPositiveResponse(outToClient, SampleDataBase.messages.size() + " messages " + "size?");
+                        for(int i=0; i<SampleDataBase.messages.size(); i++){
+                            sendResponse(outToClient, i+1 + " " + "size?");
+                        }
+                        sendTerminationCharacter(outToClient);
+                    }else{
+                        //list specific
+                        idx = Integer.valueOf(split_clientSentence[1]);
+                        if(idx<SampleDataBase.messages.size()) {
+                            sendPositiveResponse(outToClient, idx + " " + "size?");
+                        }else{
+                            sendNegativeResponse(outToClient, "no such message, only " + SampleDataBase.messages.size() + " messages in maildrop");
+                        }
+                    }
+
+                    break;
+                case "TOP":
+                    idx = Integer.valueOf(split_clientSentence[1]);
+                    count = Integer.valueOf(split_clientSentence[2]);
+
+                    idx = Integer.valueOf(split_clientSentence[1]);
+                    if(idx<SampleDataBase.messages.size()) {
+                        sendPositiveResponse(outToClient, "");
+                        sendResponse(outToClient, SampleDataBase.messages.get(Integer.valueOf(idx)).substring(0,count-1));
+                        sendTerminationCharacter(outToClient);
+                    }else{
+                        sendNegativeResponse(outToClient, "no such message, only " + SampleDataBase.messages.size() + " messages in maildrop");
+                    }
+
+                    break;
+                case "QUIT":
+                    //Update STATE
+                    updateState(inFromClient, outToClient, clientSentence);
+                    flag = true;
+
+                    break;
+                default:
+
+                    break;
+            }//end switch
+        }//end while
+    }
+
+    private void updateState(BufferedReader inFromClient, DataOutputStream outToClient, String inClientSentence) throws Exception {
+        String clientSentence;
+        String[] split_clientSentence;
+        Boolean flag = false;
+
+        //if there is a sentence from the State before
+        if(inClientSentence!=null) {
+            clientSentence=inClientSentence;
+            split_clientSentence=clientSentence.split(" ");
+            switch (split_clientSentence[0]) {
+                case "QUIT":
+                    sendPositiveResponse(outToClient, "See you later :)");
+                    flag=true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //Update State actions
+        while (!flag){
+            clientSentence=inClientSentence;
+            split_clientSentence=clientSentence.split(" ");
+            switch (split_clientSentence[0]) {
+                default:
+                    break;
+            }
+            //exit
+            flag=true;
+        }
+    }
+
+    private void authorizationState(BufferedReader inFromClient, DataOutputStream outToClient, String inClientSentence) throws Exception {
+        String clientSentence;
+        Boolean flag = false;
+
+        //checking USER
+        while (!flag) {
+            clientSentence = inFromClient.readLine();
+            //checking if user is valid (not implemented)
+            sendPositiveResponse(outToClient, "USER Accepted");
+            //sendNegativeResponse(outToClient, "USER does not exist");
+            flag = true;
+        }
+
+        flag = false;
+        //checking PASS
+        while (!flag) {
+            clientSentence = inFromClient.readLine();
+            //checking if the password for the user is valid (not implemented)
+            sendPositiveResponse(outToClient, "PASS Accepted");
+            //sendNegativeResponse(outToClient, "PASS is not correct");
+            flag = true;
         }
     }
 
