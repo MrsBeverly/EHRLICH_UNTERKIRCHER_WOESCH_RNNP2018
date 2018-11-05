@@ -16,12 +16,13 @@ public class Server extends Thread {
     private final static String terminationCharacter = ".";
     private final Socket connectionSocket;
 
-    public Server(Socket connection_Socket){
+    public Server(Socket connection_Socket) {
         connectionSocket = connection_Socket;
     }
 
-    public void run(){
+    public void run() {
         String clientSentence;
+        String[] split_clientSentence;
         boolean flag = false;
 
         try {
@@ -32,58 +33,80 @@ public class Server extends Thread {
             //notify client that the connection has succeeded
             sendPositiveResponse(outToClient, "Connected");
 
-            while(!flag){
+            while (!flag) {
                 clientSentence = inFromClient.readLine();
                 //checking if user is valid (not implemented)
                 sendPositiveResponse(outToClient, "USER Accepted");
                 //sendNegativeResponse(outToClient, "USER does not exist");
-                flag=true;
+                flag = true;
             }
 
-            flag=false;
+            flag = false;
 
-            while(!flag){
+            while (!flag) {
                 clientSentence = inFromClient.readLine();
                 //checking if the password for the user is valid (not implemented)
                 sendPositiveResponse(outToClient, "PASS Accepted");
                 //sendNegativeResponse(outToClient, "PASS is not correct");
-                flag=true;
+                flag = true;
             }
 
-            flag=false;
+            flag = false;
 
             //Transaction State
-            while (!flag){
+            while (!flag) {
                 //reading what the client has to say
                 clientSentence = inFromClient.readLine();
+                split_clientSentence=clientSentence.split(" ");
 
                 // getting the Command from the clientSentence
-                switch (clientSentence.split(" ")[0]) {
+                switch (split_clientSentence[0]) {
                     case "STAT":
                         //returning number of messages and the size in Bits (???)
-                        sendPositiveResponse(outToClient, SampleDataBase.messages.size() + " 51197");
+                        sendPositiveResponse(outToClient, SampleDataBase.messages.size() + " size?");
                         break;
                     case "RETR":
                         //returning a specific message
                         try {
-                            sendPositiveResponse(outToClient, SampleDataBase.messages.get(Integer.valueOf(clientSentence.split(" ")[1]) - 1));
+                            sendPositiveResponse(outToClient, "size?");
+                            sendResponse(outToClient, SampleDataBase.messages.get(Integer.valueOf(split_clientSentence[1]) - 1));
                             //termination of the Response
                             sendTerminationCharacter(outToClient);
-                        }catch(Exception e){
+                        } catch (Exception e) {
                             //message not found
-                            sendNegativeResponse(outToClient,"no such message");
+                            sendNegativeResponse(outToClient, "no such message");
+                        }
+                        break;
+                    case "LIST":
+                        if(split_clientSentence.length==1){
+                            //list all
+                            sendPositiveResponse(outToClient, SampleDataBase.messages.size() + " messages " + "size?");
+                            for(int i=0; i<SampleDataBase.messages.size(); i++){
+                                sendResponse(outToClient, i+1 + " " + "size?");
+                            }
+                            sendTerminationCharacter(outToClient);
+                        }else{
+                            //list specific
+                            if(Integer.valueOf(split_clientSentence[1])<SampleDataBase.messages.size()) {
+                                sendPositiveResponse(
+                                        outToClient,
+                                        Integer.valueOf(split_clientSentence[1]) + " " + "size?"
+                                );
+                            }else{
+                                sendNegativeResponse(outToClient, "no such message, only " + split_clientSentence[1] + " messages in maildrop");
+                            }
                         }
                         break;
                     case "QUIT":
                         //goto UPDATE STATE
                         // TERMINATE
-                        flag=true;
+                        flag = true;
                         break;
                     default:
                         break;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Exception = " + e);
         }
     }
@@ -101,6 +124,11 @@ public class Server extends Thread {
             server = new Server(connectionSocket);
             server.start();
         }
+    }
+
+    public void sendResponse(DataOutputStream outToClient, String response) throws Exception {
+        outToClient.writeBytes( response + endOfResponse);
+        outToClient.flush();
     }
 
     public void sendPositiveResponse(DataOutputStream outToClient, String response) throws Exception {

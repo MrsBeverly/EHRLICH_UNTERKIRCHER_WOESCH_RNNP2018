@@ -12,12 +12,10 @@ import java.util.Map;
 public class Client {
 
     private Socket socket;
-    private boolean debug = false;
+    private boolean debug = true;
     private BufferedReader reader;
     private BufferedWriter writer;
     private static final int DEFAULT_PORT = 110;
-
-
 
     //Connects the Client to the Server using Host-address and port.
     // Also generates the readers needed later.
@@ -33,12 +31,10 @@ public class Client {
             System.out.println("Connected");
     }
 
-
     //connects using the DEFAULT-PORT
     public void connect(String host) throws IOException {
         connect(host, DEFAULT_PORT);
     }
-
 
     //checks the connection
     public boolean isConnected() {
@@ -56,8 +52,6 @@ public class Client {
             System.out.println("Disconnected successfully");
     }
 
-
-
     //Checks if the next item in the buffer is an error,
     // if no does nothing,
     // if yes handles the error.
@@ -70,7 +64,6 @@ public class Client {
             throw new RuntimeException("Server has returned an error: " + response.replaceFirst("-ERR ", ""));
         return response;
     }
-
 
     //sends the command which is given as a parametrer and checks the response.
     protected String sendCommand(String command) throws IOException {
@@ -93,14 +86,12 @@ public class Client {
         sendCommand("QUIT");
     }
 
-
     //returns number of messages by cutting the information oud of response of the STAT command
     public int getNumberOfNewMessages() throws IOException {
         String response = sendCommand("STAT");
         String[] values = response.split(" ");
         return Integer.parseInt(values[1]);
     }
-
 
     //reads headers and payload and builds the message.
     protected Message getMessage(int i) throws IOException {
@@ -155,12 +146,10 @@ public class Client {
         return messageList;
     }
 
-
-
     public static void main(String[] args) throws IOException {
         Client myClient = new Client();
-        myClient.connect("pop.a1.net");
-        //myClient.connect("localhost",6789);
+        //myClient.connect("pop.a1.net");
+        myClient.connect("localhost",6789);
         myClient.login("beverly-ehrlich@aon.at", "Beverly1701Chris");
         System.out.println("Number of Mails: " + myClient.getNumberOfNewMessages());
         List<Message> messages = myClient.getMessages();
@@ -168,8 +157,32 @@ public class Client {
             System.out.println("--- Message num. " + index + " ---");
             System.out.println(messages.get(index).getBody());
         }
+
+        myClient.list();
+        myClient.list(2);
+        try {
+            myClient.list(80);
+        }catch(Exception e){
+        }
+
         myClient.logout();
         myClient.disconnect();
+    }
+
+    public String list(int idx) throws IOException {
+        return sendCommand("LIST " + idx);
+    }
+
+    public String[] list() throws IOException {
+        String str = sendCommand("LIST");
+        String[] list = new String[str.split( "").length];
+        int numberOfMessages = Integer.valueOf(str.split(" ")[1]);
+        for(int i=0; i<numberOfMessages; i++)
+        {
+            list[i] = readResponseLine();
+        }
+        readResponseLine();
+        return list;
     }
 
 //End Class
