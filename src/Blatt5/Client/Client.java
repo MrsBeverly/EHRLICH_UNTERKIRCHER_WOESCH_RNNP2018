@@ -12,17 +12,15 @@ import java.util.Map;
 public class Client {
 
     private Socket socket;
-
     private boolean debug = false;
-
     private BufferedReader reader;
     private BufferedWriter writer;
-
     private static final int DEFAULT_PORT = 110;
 
 
 
-
+    //Connects the Client to the Server using Host-address and port.
+    // Also generates the readers needed later.
     public void connect(String host, int port) throws IOException {
         socket = new Socket();
         socket.connect(new InetSocketAddress(host, port));
@@ -32,35 +30,37 @@ public class Client {
         readResponseLine();
 
         if (debug)
-            System.out.println("Connected to the host");
+            System.out.println("Connected");
     }
 
 
-
+    //connects using the DEFAULT-PORT
     public void connect(String host) throws IOException {
         connect(host, DEFAULT_PORT);
     }
 
 
-
+    //checks the connection
     public boolean isConnected() {
         return socket != null && socket.isConnected();
     }
 
-
+    //Cuts Connection and resets the reader to null
     public void disconnect() throws IOException {
         if (!isConnected())
-            throw new IllegalStateException("Not connected to a host");
+            throw new IllegalStateException("No connection found.");
         socket.close();
         reader = null;
         writer = null;
         if (debug)
-            System.out.println("Disconnected from the host");
+            System.out.println("Disconnected successfully");
     }
 
 
 
-
+    //Checks if the next item in the buffer is an error,
+    // if no does nothing,
+    // if yes handles the error.
     protected String readResponseLine() throws IOException{
         String response = reader.readLine();
         if (debug) {
@@ -72,9 +72,7 @@ public class Client {
     }
 
 
-
-
-
+    //sends the command which is given as a parametrer and checks the response.
     protected String sendCommand(String command) throws IOException {
         if (debug) {
             System.out.println("DEBUG [out]: " + command);
@@ -84,22 +82,19 @@ public class Client {
         return readResponseLine();
     }
 
-
-
-
+    //sends username and password
     public void login(String username, String password) throws IOException {
         sendCommand("USER " + username);
         sendCommand("PASS " + password);
     }
 
+    //sends command to cut connection
     public void logout() throws IOException {
         sendCommand("QUIT");
     }
 
 
-
-
-
+    //returns number of messages by cutting the information oud of response of the STAT command
     public int getNumberOfNewMessages() throws IOException {
         String response = sendCommand("STAT");
         String[] values = response.split(" ");
@@ -107,14 +102,13 @@ public class Client {
     }
 
 
-
-
-
+    //reads headers and payload and builds the message.
     protected Message getMessage(int i) throws IOException {
         String response = sendCommand("RETR " + i);
         Map<String, List<String>> headers = new HashMap<String, List<String>>();
         String headerName = null;
-// process headers
+
+        // read header data
         while ((response = readResponseLine()).length() != 0) {
             if (response.startsWith("\t")) {
                 continue; //no process of multiline headers
@@ -137,7 +131,8 @@ public class Client {
             }
             headerValues.add(headerValue);
         }
-// process body
+
+        // read payload data
         StringBuilder bodyBuilder = new StringBuilder();
         while (!(response = readResponseLine()).equals(".")) {
             bodyBuilder.append(response + "\n ");
@@ -145,7 +140,7 @@ public class Client {
         return new Message(headers, bodyBuilder.toString());
     }
 
-// get all messages from the Mailbox. returns a List of messages.
+// runs getMessage() method for each message.
     public List<Message> getMessages() throws IOException {
 
         // get number of messages in mailbox
@@ -164,11 +159,10 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         Client myClient = new Client();
-        //myClient.setDebug(true);
-        //myClient.connect("pop.a1.net");
-        myClient.connect("localhost",6789);
+        myClient.connect("pop.a1.net");
+        //myClient.connect("localhost",6789);
         myClient.login("beverly-ehrlich@aon.at", "Beverly1701Chris");
-        System.out.println("Number of new emails: " + myClient.getNumberOfNewMessages());
+        System.out.println("Number of Mails: " + myClient.getNumberOfNewMessages());
         List<Message> messages = myClient.getMessages();
         for (int index = 0; index < messages.size(); index++) {
             System.out.println("--- Message num. " + index + " ---");
