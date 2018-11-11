@@ -40,7 +40,8 @@ public class HTTPServer_single {
 
             if(split_in[1].equals("/")){
 
-                file = new File("C:\\Users\\Timon\\Desktop\\Uni\\S7\\Rechnernetze und Netzwerktechnik\\UE\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\index.html");
+                //file = new File("C:\\Users\\Timon\\Desktop\\Uni\\S7\\Rechnernetze und Netzwerktechnik\\UE\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\index.html");
+                file = new File("C:\\Daten\\GoogleDrive\\Uni_Chris\\9.Semester\\Rechnernetze\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\index.html");
                 br = new BufferedReader(new FileReader(file));
 
                 outToClient.write("HTTP/0.9 200 OK\r\n\r\n".getBytes("UTF-8"));
