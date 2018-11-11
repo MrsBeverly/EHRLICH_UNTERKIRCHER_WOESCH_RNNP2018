@@ -59,9 +59,9 @@ public class HTTPServer_single {
             } else if(split_in[1].endsWith(".png")){
 
 
-                myHTTPServer.sendNudes(Img1GIF,"gif",outToClient);
+               myHTTPServer.sendNudes(Img1GIF,"gif",outToClient);
             }else if(split_in[1].endsWith(".gif")){
-                myHTTPServer.sendNudes(Img2PNG,"png",outToClient);
+               myHTTPServer.sendNudes(Img2PNG,"png",outToClient);
 
             }
         }
@@ -76,6 +76,9 @@ public class HTTPServer_single {
         ByteArrayOutputStream myByteArrOutStr =new ByteArrayOutputStream();
 
         ImageIO.write(myImage,fileType,myByteArrOutStr);
+
+        myOut.write("HTTP/1.0 200 OK\r\n\r\n".getBytes("UTF-8"));
+
 
         myOut.write(myByteArrOutStr.toByteArray());
         myOut.flush();
