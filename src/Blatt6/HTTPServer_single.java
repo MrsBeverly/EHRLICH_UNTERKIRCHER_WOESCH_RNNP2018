@@ -18,7 +18,6 @@ public class HTTPServer_single {
         ServerSocket welcomeSocket = new ServerSocket(8800);
 
 
-
         while (true) {
             //waiting for a new client
             Socket connectionSocket = welcomeSocket.accept();
@@ -27,21 +26,21 @@ public class HTTPServer_single {
             String in;
             File file;
             BufferedReader br;
-            Boolean flag=false;
+            Boolean flag = false;
             String[] split_in;
 
             HTTPServer_single myHTTPServer = new HTTPServer_single();
 
 
             in = inFromClient.readLine();
-            if(debug) System.out.println("[DEBUG] in  = " + in);
+            if (debug) System.out.println("[DEBUG] in  = " + in);
 
             split_in = in.split(" ");
 
-            if(split_in[1].equals("/")){
+            if (split_in[1].equals("/")) {
 
                 //file = new File("C:\\Users\\Timon\\Desktop\\Uni\\S7\\Rechnernetze und Netzwerktechnik\\UE\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\index.html");
-                file = new File(Path2DocumentRoot+"/index.html");
+                file = new File(Path2DocumentRoot + "/index.html");
                 br = new BufferedReader(new FileReader(file));
 
                 outToClient.write("HTTP/0.9 200 OK\r\n\r\n".getBytes("UTF-8"));
@@ -51,16 +50,19 @@ public class HTTPServer_single {
                     if (debug) System.out.println("[DEBUG] out = " + string);
 
                     if (string == null) {
-                        flag=true;
-                    }else {
+                        flag = true;
+                    } else {
                         outToClient.write(string.getBytes("UTF-8"));
                     }
                 }
-            } else if(split_in[1].endsWith(".png")){
-                myHTTPServer.sendNudes(Path2DocumentRoot+split_in[1],"gif",outToClient);
+            } else if (split_in[1].endsWith(".png")) {
+                myHTTPServer.sendNudes(Path2DocumentRoot + split_in[1], "gif", outToClient);
 
-            }else if(split_in[1].endsWith(".gif")){
-                myHTTPServer.sendNudes(Path2DocumentRoot+split_in[1],"png",outToClient);
+            } else if (split_in[1].endsWith(".gif")) {
+                myHTTPServer.sendNudes(Path2DocumentRoot + split_in[1], "png", outToClient);
+
+            } else if (split_in[1].endsWith(".jpg")) {
+                myHTTPServer.sendNudes(Path2DocumentRoot + split_in[1], "jpg", outToClient);
 
             }
         }
