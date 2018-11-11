@@ -17,28 +17,40 @@ public class HTTPServer_single {
         while (true) {
             //waiting for a new client
             Socket connectionSocket = welcomeSocket.accept();
-
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+            String in;
+            File file;
+            BufferedReader br;
+            Boolean flag=false;
+            String[] split_in;
 
+            in = inFromClient.readLine();
+            if(debug) System.out.println("[DEBUG] in  = " + in);
 
-            System.out.println("server = " + inFromClient.readLine());
+            split_in = in.split(" ");
 
-            File file = new File("D:\\Cloud\\OneDrive - Alpen-Adria Universität Klagenfurt\\UNI_Beverly\\7. Semester(WS18)\\Rechnernetze- und Netzwerkprogrammierung\\PR_RNNP\\RNNP_UB6\\documentRoot\\index.html");
-            BufferedReader br = new BufferedReader(new FileReader(file));
+            if(split_in[1].equals("/")){
 
-            outToClient.write("HTTP/0.9 200 OK\r\n\r\n".getBytes("UTF-8"));
+                file = new File("C:\\Users\\Timon\\Desktop\\Uni\\S7\\Rechnernetze und Netzwerktechnik\\UE\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\index.html");
+                br = new BufferedReader(new FileReader(file));
 
-            while (true) {
-                String string = br.readLine();
-                if (string == null) {
-                    System.exit(1);
+                outToClient.write("HTTP/0.9 200 OK\r\n\r\n".getBytes("UTF-8"));
+
+                while (!flag) {
+                    String string = br.readLine();
+                    if (debug) System.out.println("[DEBUG] out = " + string);
+
+                    if (string == null) {
+                        flag=true;
+                    }else {
+                        outToClient.write(string.getBytes("UTF-8"));
+                    }
                 }
+            } else if(split_in[1].endsWith(".png")){
 
-                if (debug) System.out.println("br.readLine() = " + string);
+            }else if(split_in[1].endsWith(".gif")){
 
-                String stringTest = string;
-                outToClient.write(stringTest.getBytes("UTF-8"));
             }
         }
     }
