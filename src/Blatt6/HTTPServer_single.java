@@ -11,8 +11,8 @@ import java.net.Socket;
 
 public class HTTPServer_single {
     private static Boolean debug = true;
-    private static final String Img1GIF="C:\\Daten\\GoogleDrive\\Uni_Chris\\9.Semester\\Rechnernetze\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\images\\logo.gif";
-    private  static final String Img2PNG="C:\\Daten\\GoogleDrive\\Uni_Chris\\9.Semester\\Rechnernetze\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\images\\TechnikErleben.png";
+    private static final String Img1GIF = "src/Blatt6/documentRoot/images/logo.gif";
+    private static final String Img2PNG = "src/Blatt6/documentRoot/images/TechnikErleben.png";
     public static void main(String[] args) throws Exception {
         Server server;
         ServerSocket welcomeSocket = new ServerSocket(8800);
@@ -41,7 +41,7 @@ public class HTTPServer_single {
             if(split_in[1].equals("/")){
 
                 //file = new File("C:\\Users\\Timon\\Desktop\\Uni\\S7\\Rechnernetze und Netzwerktechnik\\UE\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\index.html");
-                file = new File("C:\\Daten\\GoogleDrive\\Uni_Chris\\9.Semester\\Rechnernetze\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\index.html");
+                file = new File("src/Blatt6/documentRoot/index.html");
                 br = new BufferedReader(new FileReader(file));
 
                 outToClient.write("HTTP/0.9 200 OK\r\n\r\n".getBytes("UTF-8"));
