@@ -148,8 +148,8 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         Client myClient = new Client();
-        //myClient.connect("pop.a1.net");
-        myClient.connect("localhost",6789);
+        myClient.connect("pop.a1.net");
+        //myClient.connect("localhost",6789);
         myClient.login("beverly-ehrlich@aon.at", "Beverly1701Chris");
         System.out.println("Number of Mails: " + myClient.getNumberOfNewMessages());
         List<Message> messages = myClient.getMessages();
