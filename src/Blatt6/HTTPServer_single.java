@@ -9,9 +9,10 @@ import java.net.Socket;
 
 public class HTTPServer_single {
     private static Boolean debug = true;
+
     public static void main(String[] args) throws Exception {
         Server server;
-        ServerSocket welcomeSocket = new ServerSocket(8000);
+        ServerSocket welcomeSocket = new ServerSocket(8800);
 
         while (true) {
             //waiting for a new client
@@ -26,17 +27,18 @@ public class HTTPServer_single {
             File file = new File("D:\\Cloud\\OneDrive - Alpen-Adria Universität Klagenfurt\\UNI_Beverly\\7. Semester(WS18)\\Rechnernetze- und Netzwerkprogrammierung\\PR_RNNP\\RNNP_UB6\\documentRoot\\index.html");
             BufferedReader br = new BufferedReader(new FileReader(file));
 
-            while(true) {
+            outToClient.write("HTTP/0.9 200 OK\r\n\r\n".getBytes("UTF-8"));
+
+            while (true) {
                 String string = br.readLine();
-                if(string==null) {
+                if (string == null) {
                     System.exit(1);
                 }
 
-                if(debug) System.out.println("br.readLine() = " +string);
+                if (debug) System.out.println("br.readLine() = " + string);
 
-                String stringTest = "HTTP/0.9 200 OK\r\n\r\n" + string;
-                //outToClient.writeBytes(string);
-                connectionSocket.getOutputStream().write(stringTest.getBytes("UTF-8"));
+                String stringTest = string;
+                outToClient.write(stringTest.getBytes("UTF-8"));
             }
         }
     }
