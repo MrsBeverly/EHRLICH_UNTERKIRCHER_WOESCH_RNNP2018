@@ -1,5 +1,0 @@
-/*WRITTEN BY EHRLICH BEVERLY, UNTERKIRCHER CHRISTOPH AND WÖSCH TIMON*/
-package Blatt6;
-
-public class HTTPServer_multi {
-}

@@ -3,16 +3,21 @@ package Blatt6;
 
 import Blatt5.Server.Server;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class HTTPServer_single {
     private static Boolean debug = true;
-
+    private static final String Img1GIF="C:\\Daten\\GoogleDrive\\Uni_Chris\\9.Semester\\Rechnernetze\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\images\\logo.gif";
+    private  static final String Img2PNG="C:\\Daten\\GoogleDrive\\Uni_Chris\\9.Semester\\Rechnernetze\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\images\\TechnikErleben.png";
     public static void main(String[] args) throws Exception {
         Server server;
         ServerSocket welcomeSocket = new ServerSocket(8800);
+
+
 
         while (true) {
             //waiting for a new client
@@ -24,6 +29,9 @@ public class HTTPServer_single {
             BufferedReader br;
             Boolean flag=false;
             String[] split_in;
+
+            HTTPServer_single myHTTPServer = new HTTPServer_single();
+
 
             in = inFromClient.readLine();
             if(debug) System.out.println("[DEBUG] in  = " + in);
@@ -49,9 +57,27 @@ public class HTTPServer_single {
                 }
             } else if(split_in[1].endsWith(".png")){
 
+
+                myHTTPServer.sendNudes(Img1GIF,"gif",outToClient);
             }else if(split_in[1].endsWith(".gif")){
+                myHTTPServer.sendNudes(Img2PNG,"png",outToClient);
 
             }
         }
+    }
+
+
+    public void sendNudes(String path,String fileType, DataOutputStream myOut) throws IOException {
+
+        File input_File = new File(path);
+        BufferedImage myImage = ImageIO.read(input_File);
+
+        ByteArrayOutputStream myByteArrOutStr =new ByteArrayOutputStream();
+
+        ImageIO.write(myImage,fileType,myByteArrOutStr);
+
+        myOut.write(myByteArrOutStr.toByteArray());
+        myOut.flush();
+
     }
 }
