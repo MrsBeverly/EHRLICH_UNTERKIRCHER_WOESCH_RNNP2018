@@ -51,7 +51,8 @@ public class HTTPServer_single extends Thread{
 
     private void getIndex(DataOutputStream outToClient) throws IOException {
         File file;
-        BufferedReader br;//file = new File("C:\\Users\\Timon\\Desktop\\Uni\\S7\\Rechnernetze und Netzwerktechnik\\UE\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\index.html");
+        BufferedReader br;
+        //file = new File("C:\\Users\\Timon\\Desktop\\Uni\\S7\\Rechnernetze und Netzwerktechnik\\UE\\EHRLICH_UNTERKIRCHER_WOESCH_RNNP2018\\src\\Blatt6\\documentRoot\\index.html");
         file = new File(Path2DocumentRoot + "/index.html");
         br = new BufferedReader(new FileReader(file));
         Boolean flag = false;
