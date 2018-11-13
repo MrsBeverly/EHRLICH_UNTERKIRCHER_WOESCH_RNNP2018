@@ -20,6 +20,7 @@ public class HTTPServer_single extends Thread{
 
     public void run() {
         try {
+            //wichtig ist bufferedReader
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
             String in;
@@ -28,9 +29,13 @@ public class HTTPServer_single extends Thread{
             in = inFromClient.readLine();
             if (debug) System.out.println("[DEBUG] in  = " + in);
 
+            //sollte man eher mit tokenizer machen
+            //prüfen, ob alle 3 tokens auch vorhanden sind!!!
+            //sonst fehler! hier prüfen
             split_in = in.split(" ");
 
-            if (split_in[1].equals("/")) {
+            if (split_in[1].equals("/")) {//root pfad -> /index.html
+                //print index.html
                 getIndex(outToClient);
 
             } else if (split_in[1].endsWith(".png")) {
@@ -57,7 +62,13 @@ public class HTTPServer_single extends Thread{
         br = new BufferedReader(new FileReader(file));
         Boolean flag = false;
 
-        outToClient.write("HTTP/0.9 200 OK\r\n\r\n".getBytes("UTF-8"));
+
+        //info:  readline frisst crlf auf
+
+
+        //sobald man diese "OK" message schickt, erwartet sich der browser einen header
+        //das ist weil kein browser mehr mit 0.9 läuft
+        outToClient.write("HTTP/0.9 200 OK\r\n\r\n".getBytes("UTF-8"));//zwei CLRF weil die headerfiles nicht da sind; bei höherer Implementierung kommt hier die headerfile
 
         while (!flag) {
             String string = br.readLine();
@@ -75,6 +86,9 @@ public class HTTPServer_single extends Thread{
         HTTPServer_single server;
         ServerSocket welcomeSocket = new ServerSocket(8800);
 
+        //von commandline anlesen
+        //Path2DocumentRoot = args[0];
+        //port = args[1];
 
         while (true) {
             //waiting for a new client
@@ -91,6 +105,9 @@ public class HTTPServer_single extends Thread{
 
         ByteArrayOutputStream myByteArrOutStr =new ByteArrayOutputStream();
 
+        //kopiert direkt binär auf outputstream
+        //file.copy(path, destinationStream) geht auch
+        //destinationStream = myOut
         ImageIO.write(myImage,fileType,myByteArrOutStr);
 
         myOut.write("HTTP/0.9 200 OK\r\n\r\n".getBytes("UTF-8"));
