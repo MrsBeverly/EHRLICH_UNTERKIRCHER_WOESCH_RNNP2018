@@ -7,12 +7,12 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class HTTPServer_single extends Thread{
+public class HTTPServer_UE7 extends Thread{
     private static Boolean debug = true;
     private static final String Path2DocumentRoot ="src/Blatt6/documentRoot";
     private Socket socket;
 
-    public HTTPServer_single(Socket socket_in){
+    public HTTPServer_UE7(Socket socket_in){
         socket=socket_in;
     }
 
@@ -81,7 +81,7 @@ public class HTTPServer_single extends Thread{
     }
 
     public static void main(String[] args) throws Exception {
-        Blatt6.HTTPServer_UE7 server;
+        HTTPServer_UE7 server;
         ServerSocket welcomeSocket = new ServerSocket(8800);
 
         //von commandline anlesen
@@ -91,7 +91,7 @@ public class HTTPServer_single extends Thread{
         while (true) {
             //waiting for a new client
             Socket connectionSocket = welcomeSocket.accept();
-            server= new Blatt6.HTTPServer_UE7(connectionSocket);
+            server= new HTTPServer_UE7(connectionSocket);
             server.start();
         }
     }
