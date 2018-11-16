@@ -56,31 +56,32 @@ public class HTTPServer_UE7 extends Thread{
 
     private void POSTActions(DataOutputStream outToClient,BufferedReader inFromClient, StringTokenizer in_tokens) throws IOException{
         // TODO POST Actions
-        String in = inFromClient.readLine();
+        String in;
+        in = inFromClient.readLine();//Host
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();
+        in = inFromClient.readLine();//Connection
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();
+        in = inFromClient.readLine();//Content-Length
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();
+        in = inFromClient.readLine();//Cache-Control
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();
+        in = inFromClient.readLine();//Origin
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();
+        in = inFromClient.readLine();//Upgrade-Insecure-Request
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();
+        in = inFromClient.readLine();//Content-Type
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();
+        in = inFromClient.readLine();//User-Agent
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();
+        in = inFromClient.readLine();//Accept
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();
+        in = inFromClient.readLine();//Accept-Encoding
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();
+        in = inFromClient.readLine();//Accept-Language
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();
+        in = inFromClient.readLine();//DNT
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();
+        in = inFromClient.readLine();//""
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
 
         in = inFromClient.readLine();
