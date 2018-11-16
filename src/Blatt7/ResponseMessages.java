@@ -3,7 +3,7 @@ package Blatt7;
 public class ResponseMessages {
 
 
-    public static String newLine="\r\n";
+     static String newLine="\r\n";
 
     //The request has succeeded. The information returned with the response is
     // dependent on the method used in the request, as follows:
@@ -14,7 +14,7 @@ public class ResponseMessages {
     //    the response must only contain the header information and no Entity-Body;
     //POST
     //    an entity describing or containing the result of the action.
-    public static String ok200="200 OK\r\n";
+    static String ok200="200 OK";
 
     //The request has been fulfilled and resulted in a new resource being created.
     // The newly created resource can be referenced by the URI(s) returned in the
@@ -24,7 +24,7 @@ public class ResponseMessages {
     // will be available; otherwise, the server should respond with 202 (accepted).
     //
     //Of the methods defined by this specification, only POST can create a resource.
-    public static String created201="201 Created";
+    public static String created201="201 Createdn";
 
     //The request has been accepted for processing, but the processing has not been
     // completed. The request may or may not eventually be acted upon, as it may be

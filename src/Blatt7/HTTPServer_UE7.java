@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class HTTPServer_UE7 extends Thread{
+   private static ResponseMessages myRespMsgs=new ResponseMessages();
     private static Boolean debug = true;
     private static String path2DocumentRoot ="src/Blatt7/documentRoot/wwwroot";
     private Socket socket;
@@ -134,7 +135,7 @@ public class HTTPServer_UE7 extends Thread{
         //das ist weil kein browser mehr mit 0.9 läuft
 
         //Status response
-        outToClient.write("HTTP/1.1 200 OK\r\n".getBytes("UTF-8"));
+        outToClient.write( (myRespMsgs.ok200+" "+serverVersion+myRespMsgs.newLine).getBytes("UTF-8"));
         //header
         outToClient.write("\r\n".getBytes("UTF-8"));
 
@@ -185,9 +186,9 @@ public class HTTPServer_UE7 extends Thread{
         ImageIO.write(myImage,fileType,myByteArrOutStr);
 
         //status
-        myOut.write("HTTP/0.9 200 OK\r\n".getBytes("UTF-8"));
+        myOut.write((myRespMsgs.ok200+" "+serverVersion+myRespMsgs.newLine).getBytes("UTF-8"));
         //header
-        myOut.write("\r\n".getBytes("UTF-8"));
+        myOut.write(myRespMsgs.newLine.getBytes("UTF-8"));
 
         if(debug) System.out.println("[DEBUG] " + socket + " out: Returning File");
 
