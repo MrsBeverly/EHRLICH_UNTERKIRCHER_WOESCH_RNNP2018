@@ -89,7 +89,7 @@ public class HTTPServer_UE7 extends Thread{
         char[] arr = new char[31];
         inFromClient.read(arr, 0,31);
         //in = inFromClient.readLine();
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + arr);
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + String.valueOf(arr));
     }
 
     private void GETActions(DataOutputStream outToClient, String s) throws IOException {
