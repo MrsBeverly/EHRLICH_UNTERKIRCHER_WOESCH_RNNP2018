@@ -61,6 +61,7 @@ public class HTTPServer_UE7 extends Thread{
         //get headers
         List<String> headers = getHeaders(inFromClient);
 
+        //get Content Length
         StringTokenizer w_header;
         w_header = getOneHeader(headers, "Content-Length");
         //Error?
