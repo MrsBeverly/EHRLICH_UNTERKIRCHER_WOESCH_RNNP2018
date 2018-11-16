@@ -73,7 +73,6 @@ public class HTTPServer_UE7 extends Thread{
         //get content
         int idx = Integer.valueOf(ret.countTokens());
         char[] arr = new char[idx];
-
         inFromClient.read(arr, 0, idx);//actual Content
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + String.valueOf(arr));
 
