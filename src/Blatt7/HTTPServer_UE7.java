@@ -25,7 +25,7 @@ public class HTTPServer_UE7 extends Thread{
             StringTokenizer in_tokens;
 
             in = inFromClient.readLine();
-            if (debug) System.out.println("[DEBUG] in  = " + in);
+            if (debug) System.out.println("[DEBUG] "+ socket +" in  = " + in);
 
             in_tokens = new StringTokenizer(in);
 
@@ -34,8 +34,6 @@ public class HTTPServer_UE7 extends Thread{
                 socket.close();
                 System.exit(-1);
             }
-
-            in_tokens.nextToken();
 
             switch (in_tokens.nextToken()) {
                 case "GET":
@@ -57,6 +55,7 @@ public class HTTPServer_UE7 extends Thread{
 
     private void POSTActions(DataOutputStream outToClient, StringTokenizer in_tokens){
         // TODO POST Actions
+
     }
 
     private void GETActions(DataOutputStream outToClient, String s) throws IOException {
@@ -71,7 +70,7 @@ public class HTTPServer_UE7 extends Thread{
         } else if (s.endsWith("fabicon.ico")) {
             getFile(path2DocumentRoot+"/favicon"+ s, "ico", outToClient);
         } else if (s.endsWith(".html")){
-            getHTMLFile(outToClient,s);
+            getHTMLFile(outToClient,path2DocumentRoot+s);
         }
     }
 
@@ -149,7 +148,4 @@ public class HTTPServer_UE7 extends Thread{
         myOut.flush();
 
     }
-
-
-
 }
