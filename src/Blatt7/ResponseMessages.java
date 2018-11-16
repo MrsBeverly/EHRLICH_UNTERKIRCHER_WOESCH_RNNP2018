@@ -121,19 +121,86 @@ public class ResponseMessages {
 
 
     //9.4 Client Error 4xx
-    //The 4xx class of status code is intended for cases in which the client seems to have erred. If the client has not completed the request when a 4xx code is received, it should immediately cease sending data to the server. Except when responding to a HEAD request, the server should include an entity containing an explanation of the error situation, and whether it is a temporary or permanent condition. These status codes are applicable to any request method.
+    //The 4xx class of status code is intended for cases in which the client seems
+    // to have erred. If the client has not completed the request when a 4xx code
+    // is received, it should immediately cease sending data to the server. Except
+    // when responding to a HEAD request, the server should include an entity
+    // containing an explanation of the error situation, and whether it is a temporary
+    // or permanent condition. These status codes are applicable to any request method.
     //
-    //    Note: If the client is sending data, server implementations on TCP should be careful to ensure that the client acknowledges receipt of the packet(s) containing the response prior to closing the input connection. If the client continues sending data to the server after the close, the server's controller will send a reset packet to the client, which may erase the client's unacknowledged input buffers before they can be read and interpreted by the HTTP application.
+    //    Note: If the client is sending data, server implementations on TCP should
+    // be careful to ensure that the client acknowledges receipt of the packet(s)
+    // containing the response prior to closing the input connection. If the client
+    // continues sending data to the server after the close, the server's controller
+    // will send a reset packet to the client, which may erase the client's
+    // unacknowledged input buffers before they can be read and interpreted by the
+    // HTTP application.
 
-
-    //The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
-    public static String badRequest400="400 Bad Request";
 
     //The request could not be understood by the server due to malformed syntax.
     // The client should not repeat the request without modifications.
+    public static String badRequest400="400 Bad Request";
+
+    //The request requires user authentication. The response must include a
+    // WWW-Authenticate header field (Section 10.16) containing a challenge
+    // applicable to the requested resource. The client may repeat the request with
+    // a suitable Authorization header field (Section 10.2). If the request already
+    // included Authorization credentials, then the 401 response indicates that
+    // authorization has been refused for those credentials. If the 401 response
+    // contains the same challenge as the prior response, and the user agent has
+    // already attempted authentication at least once, then the user should be
+    // presented the entity that was given in the response, since that entity may
+    // include relevant diagnostic information. HTTP access authentication is
+    // explained in Section 11.
     public static String unauthorized401 ="401 Unauthorized";
 
+    //The server understood the request, but is refusing to fulfill it. Authorization
+    // will not help and the request should not be repeated. If the request method
+    // was not HEAD and the server wishes to make public why the request has not
+    // been fulfilled, it should describe the reason for the refusal in the entity
+    // body. This status code is commonly used when the server does not wish to
+    // reveal exactly why the request has been refused, or when no other response
+    // is applicable.
+    public static String forbidden403 ="403 Forbidden";
+
+    //The server has not found anything matching the Request-URI. No indication is
+    // given of whether the condition is temporary or permanent. If the server does
+    // not wish to make this information available to the client, the status code 403
+    // (forbidden) can be used instead.
+    public static String notFound404 ="404 Not Found";
 
 
+
+    //Response status codes beginning with the digit "5" indicate cases in which the
+    // server is aware that it has erred or is incapable of performing the request.
+    // If the client has not completed the request when a 5xx code is received, it
+    // should immediately cease sending data to the server. Except when responding
+    // to a HEAD request, the server should include an entity containing an explanation
+    // of the error situation, and whether it is a temporary or permanent condition.
+    // These response codes are applicable to any request method and there are no
+    // required header fields.
+
+
+    //The server encountered an unexpected condition which prevented it from fulfilling
+    // the request.
+    public static String internalServerError500="500 Internal Server Error";
+
+    //The server does not support the functionality required to fulfill the request.
+    // This is the appropriate response when the server does not recognize the request
+    // method and is not capable of supporting it for any resource.
+    public static String notImplemented501 ="501 Not Implemented";
+
+    //The server, while acting as a gateway or proxy, received an invalid response
+    //from the upstream server it accessed in attempting to fulfill the request.
+    public static String badGateway502="502 Bad Gateway";
+
+    //The server is currently unable to handle the request due to a temporary
+    // overloading or maintenance of the server. The implication is that this is
+    // a temporary condition which will be alleviated after some delay.
+    //
+    //    Note: The existence of the 503 status code does not imply that a server
+    // must use it when becoming overloaded. Some servers may wish to simply refuse
+    // the connection.
+    public static String serviceUnavailable503="503 Service Unavailable";
 
 }
