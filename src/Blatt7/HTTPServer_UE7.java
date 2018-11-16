@@ -87,7 +87,8 @@ public class HTTPServer_UE7 extends Thread{
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
 
         char[] arr = new char[31];
-        inFromClient.read(arr,0,31);
+        inFromClient.read(arr, 0,31);
+        //in = inFromClient.readLine();
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + arr);
     }
 
