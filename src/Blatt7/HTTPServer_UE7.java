@@ -25,7 +25,7 @@ public class HTTPServer_UE7 extends Thread{
             StringTokenizer in_tokens;
 
             in = inFromClient.readLine();
-            if (debug) System.out.println("[DEBUG] in  = " + in);
+            if (debug) System.out.println("[DEBUG] "+ socket +" in  = " + in);
 
             in_tokens = new StringTokenizer(in);
 
@@ -34,8 +34,6 @@ public class HTTPServer_UE7 extends Thread{
                 socket.close();
                 System.exit(-1);
             }
-
-            in_tokens.nextToken();
 
             switch (in_tokens.nextToken()) {
                 case "GET":
@@ -70,7 +68,7 @@ public class HTTPServer_UE7 extends Thread{
         } else if (s.endsWith(".jpg")) {
             getFile(path2DocumentRoot + s, "jpg", outToClient);
         } else if (s.endsWith(".html")){
-            getHTMLFile(outToClient,s);
+            getHTMLFile(outToClient,path2DocumentRoot+s);
         }
     }
 
@@ -148,7 +146,4 @@ public class HTTPServer_UE7 extends Thread{
         myOut.flush();
 
     }
-
-
-
 }
