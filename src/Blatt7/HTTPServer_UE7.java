@@ -37,12 +37,18 @@ public class HTTPServer_UE7 extends Thread{
 
             in_tokens.nextToken();
 
-            // GET actions
-            GETActions(outToClient, in_tokens.nextToken());
-
-            // POST actions
-            // TODO POST Actions
-
+            switch (in_tokens.nextToken()) {
+                case "GET":
+                    // GET actions
+                    GETActions(outToClient, in_tokens.nextToken());
+                    break;
+                case "POST":
+                    // POST actions
+                    // TODO POST Actions
+                    break;
+                default:
+                    break;
+            }
             socket.close();
         }catch (Exception e){
             //Exception
