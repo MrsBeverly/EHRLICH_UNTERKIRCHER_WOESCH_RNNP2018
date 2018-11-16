@@ -81,7 +81,7 @@ public class HTTPServer_single extends Thread{
     }
 
     public static void main(String[] args) throws Exception {
-        Blatt6.HTTPServer_UE7 server;
+        Blatt6.HTTPServer_single server;
         ServerSocket welcomeSocket = new ServerSocket(8800);
 
         //von commandline anlesen
@@ -91,7 +91,7 @@ public class HTTPServer_single extends Thread{
         while (true) {
             //waiting for a new client
             Socket connectionSocket = welcomeSocket.accept();
-            server= new Blatt6.HTTPServer_UE7(connectionSocket);
+            server= new Blatt6.HTTPServer_single(connectionSocket);
             server.start();
         }
     }
