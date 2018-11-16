@@ -44,7 +44,7 @@ public class HTTPServer_UE7 extends Thread{
                     break;
                 case "POST":
                     // POST actions
-                    // TODO POST Actions
+                    POSTActions(outToClient,in_tokens);
                     break;
                 default:
                     break;
@@ -53,6 +53,10 @@ public class HTTPServer_UE7 extends Thread{
         }catch (Exception e){
             //Exception
         }
+    }
+
+    private void POSTActions(DataOutputStream outToClient, StringTokenizer in_tokens){
+        // TODO POST Actions
     }
 
     private void GETActions(DataOutputStream outToClient, String s) throws IOException {
