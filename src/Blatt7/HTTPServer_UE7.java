@@ -25,7 +25,7 @@ public class HTTPServer_UE7 extends Thread{
             StringTokenizer in_tokens;
 
             in = inFromClient.readLine();
-            if (debug) System.out.println("[DEBUG] "+ socket +" in  = " + in);
+            if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
 
             in_tokens = new StringTokenizer(in);
 
@@ -47,16 +47,19 @@ public class HTTPServer_UE7 extends Thread{
                 default:
                     break;
             }
+
+            in = inFromClient.readLine();
+            if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+
             socket.close();
         }catch (Exception e){
             //Exception
         }
     }
 
-    private void POSTActions(DataOutputStream outToClient, StringTokenizer in_tokens){
+    private void POSTActions(DataOutputStream outToClient, StringTokenizer in_tokens) throws IOException{
         // TODO POST Actions
-        if(debug) System.out.println("[DEBUG] "+socket+" in: "+in_tokens.nextToken());
-
+        getHTMLFile(outToClient,in_tokens.nextToken());
     }
 
     private void GETActions(DataOutputStream outToClient, String s) throws IOException {
@@ -94,7 +97,7 @@ public class HTTPServer_UE7 extends Thread{
 
         while (!flag) {
             String string = br.readLine();
-            if (debug) System.out.println("[DEBUG] " + socket + " out = " + string);
+            if (debug) System.out.println("[DEBUG] " + socket.getPort() + " out = " + string);
 
             if (string == null) {
                 flag = true;
@@ -121,7 +124,7 @@ public class HTTPServer_UE7 extends Thread{
             //waiting for a new client
             Socket connectionSocket = welcomeSocket.accept();
             server= new HTTPServer_UE7(connectionSocket);
-            if(debug) System.out.println("[DEBUG] MAIN: Thread with Socket = " + connectionSocket + " starting");
+            if(debug) System.out.println("[DEBUG] MAIN: Thread with Socket = " + connectionSocket.getPort() + " starting");
             server.start();
         }
     }
