@@ -76,7 +76,9 @@ public class HTTPServer_UE7 extends Thread{
         inFromClient.read(arr, 0, idx);//actual Content
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + String.valueOf(arr));
 
-        //return response
+        //TODO return response
+        //TODO return headers (content)
+        //TODO return HTML FILE
     }
 
     private StringTokenizer getOneHeader(List<String> headers, String want) {
