@@ -73,7 +73,7 @@ public class HTTPServer_UE7 extends Thread{
         }
     }
 
-    private void getHTMLFile(DataOutputStream outToClient) throws IOException {
+    private void getHTMLFile(DataOutputStream outToClient,String path2Get) throws IOException {
         File file;
         BufferedReader br;
         file = new File(path2DocumentRoot + "/index.html");
