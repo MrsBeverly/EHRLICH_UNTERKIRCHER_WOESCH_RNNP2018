@@ -42,14 +42,11 @@ public class HTTPServer_UE7 extends Thread{
                     break;
                 case "POST":
                     // POST actions
-                    POSTActions(outToClient,in_tokens);
+                    POSTActions(outToClient, inFromClient,in_tokens);
                     break;
                 default:
                     break;
             }
-
-            in = inFromClient.readLine();
-            if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
 
             socket.close();
         }catch (Exception e){
@@ -57,9 +54,41 @@ public class HTTPServer_UE7 extends Thread{
         }
     }
 
-    private void POSTActions(DataOutputStream outToClient, StringTokenizer in_tokens) throws IOException{
+    private void POSTActions(DataOutputStream outToClient,BufferedReader inFromClient, StringTokenizer in_tokens) throws IOException{
         // TODO POST Actions
-        getHTMLFile(outToClient,in_tokens.nextToken());
+        String in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+
+        in = inFromClient.readLine();
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+
+        char[] arr = new char[31];
+        inFromClient.read(arr,0,31);
+        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + arr);
     }
 
     private void GETActions(DataOutputStream outToClient, String s) throws IOException {
