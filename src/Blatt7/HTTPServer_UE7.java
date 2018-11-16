@@ -55,7 +55,7 @@ public class HTTPServer_UE7 extends Thread{
 
     private void POSTActions(DataOutputStream outToClient, StringTokenizer in_tokens){
         // TODO POST Actions
-
+        if(debug) System.out.println("[DEBUG] "+socket+" in: "+in_tokens.nextToken());
     }
 
     private void GETActions(DataOutputStream outToClient, String s) throws IOException {
