@@ -79,6 +79,8 @@ public class HTTPServer_UE7 extends Thread{
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + String.valueOf(arr));
 
         //TODO return response
+
+
         //TODO return headers (content)
         //TODO return HTML FILE
     }
@@ -135,7 +137,8 @@ public class HTTPServer_UE7 extends Thread{
         //das ist weil kein browser mehr mit 0.9 läuft
 
         //Status response
-        outToClient.write( (myRespMsgs.ok200+" "+serverVersion+myRespMsgs.newLine).getBytes("UTF-8"));
+        //outToClient.write( (myRespMsgs.ok200+" "+serverVersion+myRespMsgs.newLine).getBytes("UTF-8"));
+        outToClient.write( (serverVersion+" "+myRespMsgs.ok200+myRespMsgs.newLine).getBytes("UTF-8"));
         //header
         outToClient.write("\r\n".getBytes("UTF-8"));
 
@@ -186,7 +189,8 @@ public class HTTPServer_UE7 extends Thread{
         ImageIO.write(myImage,fileType,myByteArrOutStr);
 
         //status
-        myOut.write((myRespMsgs.ok200+" "+serverVersion+myRespMsgs.newLine).getBytes("UTF-8"));
+        //myOut.write((myRespMsgs.ok200+" "+serverVersion+myRespMsgs.newLine).getBytes("UTF-8"));
+        myOut.write((serverVersion+" "+myRespMsgs.ok200+myRespMsgs.newLine).getBytes("UTF-8"));
         //header
         myOut.write(myRespMsgs.newLine.getBytes("UTF-8"));
 
