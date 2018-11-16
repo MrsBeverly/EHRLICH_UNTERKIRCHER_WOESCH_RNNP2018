@@ -1,0 +1,139 @@
+package Blatt7;
+
+public class ResponseMessages {
+
+
+    public static String newLine="\r\n";
+
+    //The request has succeeded. The information returned with the response is
+    // dependent on the method used in the request, as follows:
+    //
+    //GET
+    //    an entity corresponding to the requested resource is sent in the response;
+    //HEAD
+    //    the response must only contain the header information and no Entity-Body;
+    //POST
+    //    an entity describing or containing the result of the action.
+    public static String ok200="200 OK\r\n";
+
+    //The request has been fulfilled and resulted in a new resource being created.
+    // The newly created resource can be referenced by the URI(s) returned in the
+    // entity of the response. The origin server should create the resource before
+    // using this Status-Code. If the action cannot be carried out immediately, the
+    // server must include in the response body a description of when the resource
+    // will be available; otherwise, the server should respond with 202 (accepted).
+    //
+    //Of the methods defined by this specification, only POST can create a resource.
+    public static String created201="201 Created";
+
+    //The request has been accepted for processing, but the processing has not been
+    // completed. The request may or may not eventually be acted upon, as it may be
+    // disallowed when processing actually takes place. There is no facility for
+    // re-sending a status code from an asynchronous operation such as this.
+    //
+    //The 202 response is intentionally non-committal. Its purpose is to allow a
+    // server to accept a request for some other process (perhaps a batch-oriented
+    // process that is only run once per day) without requiring that the user agent's
+    // connection to the server persist until the process is completed. The entity
+    // returned with this response should include an indication of the request's current
+    // status and either a pointer to a status monitor or some estimate of when the
+    // user can expect the request to be fulfilled.
+    public static String accepted202="202 Accepted";
+
+    //The server has fulfilled the request but there is no new information to send back.
+    // If the client is a user agent, it should not change its document view from that
+    // which caused the request to be generated. This response is primarily intended to
+    // allow input for scripts or other actions to take place without causing a change to
+    // the user agent's active document view. The response may include new metainformation
+    // in the form of entity headers, which should apply to the document currently in the
+    // user agent's active view.
+    public static String noContent204="204 No Content";
+
+
+    //9.3 Redirection 3xx
+
+    //This class of status code indicates that further action needs to be taken by
+    // the user agent in order to fulfill the request. The action required may be
+    // carried out by the user agent without interaction with the user if and only
+    // if the method used in the subsequent request is GET or HEAD. A user agent
+    // should never automatically redirect a request more than 5 times, since such
+    // redirections usually indicate an infinite loop.
+
+
+    //This response code is not directly used by HTTP/1.0 applications, but serves
+    // as the default for interpreting the 3xx class of responses.
+    //
+    //The requested resource is available at one or more locations. Unless it was
+    // a HEAD request, the response should include an entity containing a list of
+    // resource characteristics and locations from which the user or user agent can
+    // choose the one most appropriate. If the server has a preferred choice, it should
+    // include the URL in a Location field; user agents may use this field value for
+    // automatic redirection.
+    public static String multipleChoises300="300 Multiple Choises";
+
+    //The requested resource has been assigned a new permanent URL and any future
+    // references to this resource should be done using that URL. Clients with link
+    // editing capabilities should automatically relink references to the Request-URI
+    // to the new reference returned by the server, where possible.
+    //
+    //The new URL must be given by the Location field in the response. Unless it was
+    // a HEAD request, the Entity-Body of the response should contain a short note
+    // with a hyperlink to the new URL.
+    //
+    //If the 301 status code is received in response to a request using the POST
+    // method, the user agent must not automatically redirect the request unless
+    // it can be confirmed by the user, since this might change the conditions under
+    // which the request was issued.
+    //
+    // Note: When automatically redirecting a POST request after receiving a
+    // 301 status code, some existing user agents will erroneously change it into
+    // a GET request.
+    public static String movedPermanently301="301 Moved Permanently";
+
+    //The requested resource resides temporarily under a different URL. Since the
+    // redirection may be altered on occasion, the client should continue to use the
+    // Request-URI for future requests.
+    //
+    //The URL must be given by the Location field in the response. Unless it was a
+    // HEAD request, the Entity-Body of the response should contain a short note
+    // with a hyperlink to the new URI(s).
+    //
+    //If the 302 status code is received in response to a request using the POST
+    // method, the user agent must not automatically redirect the request unless it
+    // can be confirmed by the user, since this might change the conditions under
+    // which the request was issued.
+    //
+    //    Note: When automatically redirecting a POST request after receiving a
+    // 302 status code, some existing user agents will erroneously change it into a
+    // GET request.
+    public static String movedTemporary302="302 Moved Temporarily";
+
+    // If the client has performed a conditional GET request and access is allowed,
+    // but the document has not been modified since the date and time specified in
+    // the If-Modified-Since field, the server must respond with this status code
+    // and not send an Entity-Body to the client. Header fields contained in the
+    // response should only include information which is relevant to cache managers
+    // or which may have changed independently of the entity's Last-Modified date.
+    // Examples of relevant header fields include: Date, Server, and Expires. A cache
+    // should update its cached entity to reflect any new field values given in the
+    // 304 response.
+    public static String notModified304="304 Not Modified";
+
+
+    //9.4 Client Error 4xx
+    //The 4xx class of status code is intended for cases in which the client seems to have erred. If the client has not completed the request when a 4xx code is received, it should immediately cease sending data to the server. Except when responding to a HEAD request, the server should include an entity containing an explanation of the error situation, and whether it is a temporary or permanent condition. These status codes are applicable to any request method.
+    //
+    //    Note: If the client is sending data, server implementations on TCP should be careful to ensure that the client acknowledges receipt of the packet(s) containing the response prior to closing the input connection. If the client continues sending data to the server after the close, the server's controller will send a reset packet to the client, which may erase the client's unacknowledged input buffers before they can be read and interpreted by the HTTP application.
+
+
+    //The request could not be understood by the server due to malformed syntax. The client should not repeat the request without modifications.
+    public static String badRequest400="400 Bad Request";
+
+    //The request could not be understood by the server due to malformed syntax.
+    // The client should not repeat the request without modifications.
+    public static String unauthorized401 ="401 Unauthorized";
+
+
+
+
+}
