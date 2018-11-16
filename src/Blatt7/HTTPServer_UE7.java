@@ -64,14 +64,14 @@ public class HTTPServer_UE7 extends Thread{
         StringTokenizer w_header;
         w_header = getOneHeader(headers, "Content-Length");
         //Error?
-        if(!w_header.nextToken().equals("Content-Length")){
+        if(!w_header.nextToken().equals("Content-Length:")){
             //error
             socket.close();
             System.exit(-1);
         }
 
         //get content
-        int idx = w_header.countTokens();
+        int idx = Integer.valueOf(w_header.nextToken());
         char[] arr = new char[idx];
         inFromClient.read(arr, 0, idx);//actual Content
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + String.valueOf(arr));
