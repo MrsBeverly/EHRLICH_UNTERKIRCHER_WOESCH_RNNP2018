@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class HTTPServer_UE7 extends Thread{
@@ -55,41 +57,49 @@ public class HTTPServer_UE7 extends Thread{
     }
 
     private void POSTActions(DataOutputStream outToClient,BufferedReader inFromClient, StringTokenizer in_tokens) throws IOException{
-        // TODO POST Actions
-        String in;
-        in = inFromClient.readLine();//Host
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();//Connection
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();//Content-Length
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();//Cache-Control
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();//Origin
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();//Upgrade-Insecure-Request
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();//Content-Type
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();//User-Agent
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();//Accept
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();//Accept-Encoding
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();//Accept-Language
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();//DNT
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
-        in = inFromClient.readLine();//""
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        //get headers
+        List<String> headers = getHeaders(inFromClient);
 
-        in = inFromClient.readLine();
-        if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + in);
+        StringTokenizer ret;
+        ret = getOneHeader(headers, "Content-Length");
+        //Error?
+        if(!ret.nextToken().equals("Content-Length")){
+            //error
+            socket.close();
+            System.exit(-1);
+        }
 
-        char[] arr = new char[31];
-        inFromClient.read(arr, 0,31);//actual Content
+        //get content
+        int idx = Integer.valueOf(ret.countTokens());
+        char[] arr = new char[idx];
+
+        inFromClient.read(arr, 0, idx);//actual Content
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + String.valueOf(arr));
+
+        //return response
+    }
+
+    private StringTokenizer getOneHeader(List<String> headers, String want) {
+        for(String i : headers){
+            if(i.startsWith(want)) {
+                return new StringTokenizer(i);
+            }
+        }
+        return null;
+    }
+
+    private List<String> getHeaders(BufferedReader inFromClient) throws IOException {
+        List<String> in = new LinkedList<String>();
+        boolean flag = false;
+        //read until ""
+        while(!flag) {
+            in.add(inFromClient.readLine());
+            if (debug) System.out.println("[DEBUG] " + socket.getPort() + " in  = " + ((LinkedList<String>) in).getLast());
+            if(((LinkedList<String>) in).getLast().equals("")){
+                flag=true;
+            }
+        }
+        return in;
     }
 
     private void GETActions(DataOutputStream outToClient, String s) throws IOException {
