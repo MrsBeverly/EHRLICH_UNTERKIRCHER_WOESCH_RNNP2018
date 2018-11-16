@@ -63,7 +63,7 @@ public class HTTPServer_UE7 extends Thread{
         if (s.equals("/")) {
             //root pfad -> /index.html
             //print index.html
-            getIndex(outToClient);
+            getHTMLFile(outToClient);
         } else if (s.endsWith(".png")) {
             getFile(path2DocumentRoot + s, "gif", outToClient);
         } else if (s.endsWith(".gif")) {
@@ -73,7 +73,7 @@ public class HTTPServer_UE7 extends Thread{
         }
     }
 
-    private void getIndex(DataOutputStream outToClient) throws IOException {
+    private void getHTMLFile(DataOutputStream outToClient) throws IOException {
         File file;
         BufferedReader br;
         file = new File(path2DocumentRoot + "/index.html");
@@ -86,7 +86,7 @@ public class HTTPServer_UE7 extends Thread{
         //das ist weil kein browser mehr mit 0.9 läuft
 
         //Status response
-        outToClient.write("HTTP/0.9 200 OK\r\n".getBytes("UTF-8"));
+        outToClient.write("HTTP/1.1 200 OK\r\n".getBytes("UTF-8"));
         //header
         outToClient.write("\r\n".getBytes("UTF-8"));
 
@@ -147,4 +147,7 @@ public class HTTPServer_UE7 extends Thread{
         myOut.flush();
 
     }
+
+
+
 }
