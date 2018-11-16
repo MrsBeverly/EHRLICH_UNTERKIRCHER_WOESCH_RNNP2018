@@ -78,11 +78,25 @@ public class HTTPServer_UE7 extends Thread{
         inFromClient.read(arr, 0, idx);//actual Content
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + String.valueOf(arr));
 
-        //TODO return response
+
+        outToClient.write((serverVersion+" "+myRespMsgs.ok200+myRespMsgs.newLine).getBytes("UTF-8"));
 
 
-        //TODO return headers (content)
-        //TODO return HTML FILE
+        String[] clientContent =String.valueOf(arr).split("&");
+        String returnHtml ="<html><body> <p> Received form variable with name "
+                +clientContent[0].split("=")[0]
+                +" and value "
+                +clientContent[0].split("=")[1]
+                +"</p> <p> Received form variable with name "
+                +clientContent[1].split("=")[0]
+                +" and value "
+                +clientContent[1].split("=")[1]
+                +"</p> </body></html>";
+        outToClient.write(("Content-Length: "+returnHtml.getBytes("UTF-8").length+"\r\n").getBytes("UTF-8"));
+        outToClient.write("Content-Type: text\\html\r\n".getBytes("UTF-8"));
+        outToClient.write("\r\n".getBytes("UTF-8"));
+        outToClient.write(returnHtml.getBytes("UTF-8"));
+
     }
 
     private StringTokenizer getOneHeader(List<String> headers, String want) {
@@ -137,7 +151,6 @@ public class HTTPServer_UE7 extends Thread{
         //das ist weil kein browser mehr mit 0.9 läuft
 
         //Status response
-        //outToClient.write( (myRespMsgs.ok200+" "+serverVersion+myRespMsgs.newLine).getBytes("UTF-8"));
         outToClient.write( (serverVersion+" "+myRespMsgs.ok200+myRespMsgs.newLine).getBytes("UTF-8"));
         //header
         outToClient.write("\r\n".getBytes("UTF-8"));
@@ -189,7 +202,6 @@ public class HTTPServer_UE7 extends Thread{
         ImageIO.write(myImage,fileType,myByteArrOutStr);
 
         //status
-        //myOut.write((myRespMsgs.ok200+" "+serverVersion+myRespMsgs.newLine).getBytes("UTF-8"));
         myOut.write((serverVersion+" "+myRespMsgs.ok200+myRespMsgs.newLine).getBytes("UTF-8"));
         //header
         myOut.write(myRespMsgs.newLine.getBytes("UTF-8"));
