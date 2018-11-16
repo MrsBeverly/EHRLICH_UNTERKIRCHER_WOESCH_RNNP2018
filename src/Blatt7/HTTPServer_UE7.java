@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 public class HTTPServer_UE7 extends Thread{
     private static Boolean debug = true;
-    private static String path2DocumentRoot ="src/Blatt6/documentRoot";
+    private static String path2DocumentRoot ="src/Blatt7/documentRoot/wwwroot";
     private Socket socket;
 
     public HTTPServer_UE7(Socket socket_in){
