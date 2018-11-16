@@ -61,15 +61,15 @@ public class HTTPServer_UE7 extends Thread{
 
     private void GETActions(DataOutputStream outToClient, String s) throws IOException {
         if (s.equals("/")) {
-            //root pfad -> /index.html
-            //print index.html
-            getHTMLFile(outToClient);
+            getHTMLFile(outToClient,path2DocumentRoot+"/index.html");
         } else if (s.endsWith(".png")) {
             getFile(path2DocumentRoot + s, "gif", outToClient);
         } else if (s.endsWith(".gif")) {
             getFile(path2DocumentRoot + s, "png", outToClient);
         } else if (s.endsWith(".jpg")) {
             getFile(path2DocumentRoot + s, "jpg", outToClient);
+        } else if (s.endsWith(".html")){
+            getHTMLFile(outToClient,s);
         }
     }
 
