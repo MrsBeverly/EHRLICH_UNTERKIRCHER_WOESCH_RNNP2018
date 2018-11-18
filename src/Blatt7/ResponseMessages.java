@@ -24,7 +24,7 @@ public class ResponseMessages {
     // will be available; otherwise, the server should respond with 202 (accepted).
     //
     //Of the methods defined by this specification, only POST can create a resource.
-    public static String created201="201 Createdn";
+    public static String created201="201 Created";
 
     //The request has been accepted for processing, but the processing has not been
     // completed. The request may or may not eventually be acted upon, as it may be
@@ -69,7 +69,7 @@ public class ResponseMessages {
     // choose the one most appropriate. If the server has a preferred choice, it should
     // include the URL in a Location field; user agents may use this field value for
     // automatic redirection.
-    public static String multipleChoises300="300 Multiple Choises";
+    public static String multipleChoises300="300 Multiple Choices";
 
     //The requested resource has been assigned a new permanent URL and any future
     // references to this resource should be done using that URL. Clients with link
