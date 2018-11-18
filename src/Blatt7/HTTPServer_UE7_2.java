@@ -22,39 +22,45 @@ public class HTTPServer_UE7_2 extends Thread {
     }
 
     public void run() {
+
         try {
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
-            String in;
-            StringTokenizer in_tokens;
 
-            in = inFromClient.readLine();
-            if (debug) System.out.println("[DEBUG] " + socket.getPort() + " in  = " + in);
+            try {
 
-            in_tokens = new StringTokenizer(in);
+                String in;
+                StringTokenizer in_tokens;
 
-            //checking if there are 3 Tokens
-            if (in_tokens.countTokens() != 3) {
+                in = inFromClient.readLine();
+                if (debug) System.out.println("[DEBUG] " + socket.getPort() + " in  = " + in);
+
+                in_tokens = new StringTokenizer(in);
+
+                //checking if there are 3 Tokens
+                if (in_tokens.countTokens() != 3) {
+                    socket.close();
+                    System.exit(-1);
+                }
+
+                switch (in_tokens.nextToken()) {
+                    case "GET":
+                        // GET actions
+                        GETActions(outToClient, in_tokens.nextToken());
+                        break;
+                    case "POST":
+                        // POST actions
+                        POSTActions(outToClient, inFromClient, in_tokens);
+                        break;
+                    default:
+                        break;
+                }
+
                 socket.close();
-                System.exit(-1);
+            } catch (Exception e) {
+                outToClient.write((serverVersion + " " + myRespMsgs.internalServerError500 + myRespMsgs.newLine).getBytes("UTF-8"));
             }
-
-            switch (in_tokens.nextToken()) {
-                case "GET":
-                    // GET actions
-                    GETActions(outToClient, in_tokens.nextToken());
-                    break;
-                case "POST":
-                    // POST actions
-                    POSTActions(outToClient, inFromClient, in_tokens);
-                    break;
-                default:
-                    break;
-            }
-
-            socket.close();
         } catch (Exception e) {
-            //Exception
         }
     }
 
