@@ -63,6 +63,7 @@ public class HTTPServer_UE7 extends Thread{
         List<String> headers = getHeaders(inFromClient);
 
         //get Content Length
+        //StringTokenizer splits string and puts it on stack (if read, stringpart is gone)
         StringTokenizer w_header;
         w_header = getOneHeader(headers, "Content-Length");
         //Error?
@@ -75,15 +76,20 @@ public class HTTPServer_UE7 extends Thread{
         //get content
         int idx = Integer.valueOf(w_header.nextToken());
         char[] arr = new char[idx];
-        inFromClient.read(arr, 0, idx);//actual Content
+        //actual Content
+        inFromClient.read(arr, 0, idx);
         if (debug) System.out.println("[DEBUG] "+ socket.getPort() +" in  = " + String.valueOf(arr));
 
 
+        //response message
         outToClient.write((serverVersion+" "+myRespMsgs.ok200+myRespMsgs.newLine).getBytes("UTF-8"));
 
 
+        //squishes array arr into one string and splits it at &
+        //message looks like this: txtField1=Mickey&txtField2=mouse
         String[] clientContent =String.valueOf(arr).split("&");
         String returnHtml ="<html><body> <p> Received form variable with name "
+                //splits at = to get actual values
                 +clientContent[0].split("=")[0]
                 +" and value "
                 +clientContent[0].split("=")[1]
