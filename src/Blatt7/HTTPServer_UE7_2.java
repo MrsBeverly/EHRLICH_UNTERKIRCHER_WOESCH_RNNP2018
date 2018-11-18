@@ -16,7 +16,7 @@ public class HTTPServer_UE7_2 extends Thread {
     private static String path2DocumentRoot = "src/Blatt7/documentRoot/wwwroot";
     private Socket socket;
     public static String serverVersion = "HTTP/1.1";
-
+    private boolean flagStayAlive=true;
     public HTTPServer_UE7_2(Socket socket_in) {
         socket = socket_in;
     }
@@ -32,29 +32,40 @@ public class HTTPServer_UE7_2 extends Thread {
                 String in;
                 StringTokenizer in_tokens;
 
+
+
+                //repears until flag is thrown, then stops thread
+                while (flagStayAlive) {
                 in = inFromClient.readLine();
                 if (debug) System.out.println("[DEBUG] " + socket.getPort() + " in  = " + in);
 
-                in_tokens = new StringTokenizer(in);
+                    in_tokens = new StringTokenizer(in);
 
-                //checking if there are 3 Tokens
-                if (in_tokens.countTokens() != 3) {
-                    socket.close();
-                    System.exit(-1);
+                    //checking if there are 3 Tokens
+                    if (in_tokens.countTokens() != 3) {
+                        outToClient.write((serverVersion + " " + myRespMsgs.badRequest400 + myRespMsgs.newLine).getBytes("UTF-8"));
+                        flagStayAlive=false;
+                        break;
+
+                    }
+
+
+                    switch (in_tokens.nextToken()) {
+                        case "GET":
+                            // GET actions
+                            GETActions(outToClient,inFromClient ,in_tokens.nextToken());
+                            break;
+                        case "POST":
+                            // POST actions
+                            POSTActions(outToClient, inFromClient);
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
-                switch (in_tokens.nextToken()) {
-                    case "GET":
-                        // GET actions
-                        GETActions(outToClient, in_tokens.nextToken());
-                        break;
-                    case "POST":
-                        // POST actions
-                        POSTActions(outToClient, inFromClient, in_tokens);
-                        break;
-                    default:
-                        break;
-                }
+
+
 
                 socket.close();
             } catch (Exception e) {
@@ -64,51 +75,60 @@ public class HTTPServer_UE7_2 extends Thread {
         }
     }
 
-    private void POSTActions(DataOutputStream outToClient, BufferedReader inFromClient, StringTokenizer in_tokens) throws IOException {
+    private void POSTActions(DataOutputStream outToClient, BufferedReader inFromClient) throws IOException {
         //get headers
         List<String> headers = getHeaders(inFromClient);
 
         //get Content Length
         //StringTokenizer splits string and puts it on stack (if read, stringpart is gone)
         StringTokenizer w_header;
+
+        //sets flagStayAlive to false if necessary
+        setStayAlive(headers);
+
         w_header = getOneHeader(headers, "Content-Length");
         //Error?
         if (!w_header.nextToken().equals("Content-Length:")) {
             //error
-            socket.close();
-            System.exit(-1);
+           flagStayAlive=false;
+        }else {
+
+            //get content
+            int idx = Integer.valueOf(w_header.nextToken());
+            char[] arr = new char[idx];
+            //actual Content
+            inFromClient.read(arr, 0, idx);
+            if (debug) System.out.println("[DEBUG] " + socket.getPort() + " in  = " + String.valueOf(arr));
+
+
+            //response message
+            outToClient.write((serverVersion + " " + myRespMsgs.ok200 + myRespMsgs.newLine).getBytes("UTF-8"));
+
+
+
+            /*message looks like this: txtField1=Mickey&txtField2=Mouse
+            *squishes array arr into one string and splits it at &
+            *The resulting Array looks like [txtField1=Mickey] [txtField2=Mouse]
+            * Then we build the Answer as a String that consists of HTML statements for displaying,
+            * the sentence we shall return and the field-name and content we split out of the array.
+            **/
+
+            String[] clientContent = String.valueOf(arr).split("&");
+            String returnHtml = "<html><body> <p> Received form variable with name "
+                    //splits at = to get actual values
+                    + clientContent[0].split("=")[0]
+                    + " and value "
+                    + clientContent[0].split("=")[1]
+                    + "</p> <p> Received form variable with name "
+                    + clientContent[1].split("=")[0]
+                    + " and value "
+                    + clientContent[1].split("=")[1]
+                    + "</p> </body></html>";
+            outToClient.write(("Content-Length: " + returnHtml.getBytes("UTF-8").length + myRespMsgs.newLine).getBytes("UTF-8"));
+            outToClient.write((myRespMsgs.messageTypeHTML+myRespMsgs.newLine).getBytes("UTF-8"));
+            outToClient.write(myRespMsgs.newLine.getBytes("UTF-8"));
+            outToClient.write(returnHtml.getBytes("UTF-8"));
         }
-
-        //get content
-        int idx = Integer.valueOf(w_header.nextToken());
-        char[] arr = new char[idx];
-        //actual Content
-        inFromClient.read(arr, 0, idx);
-        if (debug) System.out.println("[DEBUG] " + socket.getPort() + " in  = " + String.valueOf(arr));
-
-
-        //response message
-        outToClient.write((serverVersion + " " + myRespMsgs.ok200 + myRespMsgs.newLine).getBytes("UTF-8"));
-
-
-        //squishes array arr into one string and splits it at &
-        //message looks like this: txtField1=Mickey&txtField2=mouse
-        String[] clientContent = String.valueOf(arr).split("&");
-        String returnHtml = "<html><body> <p> Received form variable with name "
-                //splits at = to get actual values
-                + clientContent[0].split("=")[0]
-                + " and value "
-                + clientContent[0].split("=")[1]
-                + "</p> <p> Received form variable with name "
-                + clientContent[1].split("=")[0]
-                + " and value "
-                + clientContent[1].split("=")[1]
-                + "</p> </body></html>";
-        outToClient.write(("Content-Length: " + returnHtml.getBytes("UTF-8").length + "\r\n").getBytes("UTF-8"));
-        outToClient.write("Content-Type: text\\html\r\n".getBytes("UTF-8"));
-        outToClient.write("\r\n".getBytes("UTF-8"));
-        outToClient.write(returnHtml.getBytes("UTF-8"));
-
     }
 
     private StringTokenizer getOneHeader(List<String> headers, String want) {
@@ -135,7 +155,11 @@ public class HTTPServer_UE7_2 extends Thread {
         return in;
     }
 
-    private void GETActions(DataOutputStream outToClient, String s) throws IOException {
+    private void GETActions(DataOutputStream outToClient, BufferedReader inFromClient,String s) throws IOException {
+
+        List<String> headers = getHeaders(inFromClient);
+        setStayAlive(headers);
+
         if (s.equals("/")) {
             getHTMLFile(outToClient, path2DocumentRoot + "/index.html");
         } else if (s.endsWith(".png")) {
@@ -234,6 +258,30 @@ public class HTTPServer_UE7_2 extends Thread {
 
         myOut.write(myByteArrOutStr.toByteArray());
         myOut.flush();
+
+    }
+
+    private void setStayAlive(List<String> headers){
+        /*
+         *This function is used to check if the message we received contains another connection token then "stay-alive".
+         *If yes, it sets the flag: stayAlive to false. The rest stays as it is.
+         * The result is that the current request is progressed as usual, but the thread doesn't wait for another request.
+         * The Thread teminates.
+          */
+
+        StringTokenizer strTok=getOneHeader(headers,"Connection:");
+        strTok.nextToken();
+        String connectionToken=String.valueOf(strTok.nextToken());
+        if(debug){System.out.println("[DEBUG] Connection Token read: "+connectionToken);}
+
+        if(!connectionToken.equals("keep-alive")){
+            flagStayAlive=false;
+        }
+
+
+
+
+
 
     }
 }
