@@ -15,7 +15,7 @@ public class HTTPServer_UE7_1 extends Thread {
     private static Boolean debug = true;
     private static String path2DocumentRoot = "src/Blatt7/documentRoot/wwwroot";
     private Socket socket;
-    public static String serverVersion = "HTTP/1.1";
+    public static String serverVersion = "HTTP/1.0";
 
     public HTTPServer_UE7_1(Socket socket_in) {
         socket = socket_in;
