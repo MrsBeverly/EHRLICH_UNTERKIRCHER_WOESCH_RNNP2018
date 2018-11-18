@@ -10,14 +10,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class HTTPServer_UE7 extends Thread {
+public class HTTPServer_UE7_2 extends Thread {
     private static ResponseMessages myRespMsgs = new ResponseMessages();
     private static Boolean debug = true;
     private static String path2DocumentRoot = "src/Blatt7/documentRoot/wwwroot";
     private Socket socket;
     public static String serverVersion = "HTTP/1.1";
 
-    public HTTPServer_UE7(Socket socket_in) {
+    public HTTPServer_UE7_2(Socket socket_in) {
         socket = socket_in;
     }
 
@@ -193,14 +193,14 @@ public class HTTPServer_UE7 extends Thread {
         if (debug) System.out.println("[DEBUG] MAIN: Port = " + args[0] + "\n[DEBUG] MAIN: Document root = " + args[1]);
 
         //setting up server
-        HTTPServer_UE7 server;
+        HTTPServer_UE7_2 server;
         ServerSocket welcomeSocket = new ServerSocket(Integer.valueOf(args[0]));
         path2DocumentRoot = args[1];
 
         while (true) {
             //waiting for a new client
             Socket connectionSocket = welcomeSocket.accept();
-            server = new HTTPServer_UE7(connectionSocket);
+            server = new HTTPServer_UE7_2(connectionSocket);
             if (debug)
                 System.out.println("[DEBUG] MAIN: Thread with Socket = " + connectionSocket.getPort() + " starting");
             server.start();
