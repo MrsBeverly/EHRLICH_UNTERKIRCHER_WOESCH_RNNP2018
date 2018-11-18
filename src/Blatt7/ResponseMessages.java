@@ -7,8 +7,6 @@ public class ResponseMessages {
      static String contentTypeHTML ="Content-Type: text\\html";
 
 
-
-
     //The request has succeeded. The information returned with the response is
     // dependent on the method used in the request, as follows:
     //
