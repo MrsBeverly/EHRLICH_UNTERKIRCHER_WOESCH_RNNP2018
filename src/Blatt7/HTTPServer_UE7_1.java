@@ -102,9 +102,9 @@ public class HTTPServer_UE7_1 extends Thread {
                 + " and value "
                 + clientContent[1].split("=")[1]
                 + "</p> </body></html>";
-        outToClient.write(("Content-Length: " + returnHtml.getBytes("UTF-8").length + "\r\n").getBytes("UTF-8"));
-        outToClient.write("Content-Type: text\\html\r\n".getBytes("UTF-8"));
-        outToClient.write("\r\n".getBytes("UTF-8"));
+        outToClient.write(("Content-Length: " + returnHtml.getBytes("UTF-8").length + myRespMsgs.newLine).getBytes("UTF-8"));
+        outToClient.write((myRespMsgs.contentTypeHTML+myRespMsgs.newLine).getBytes("UTF-8"));
+        outToClient.write(myRespMsgs.newLine.getBytes("UTF-8"));
         outToClient.write(returnHtml.getBytes("UTF-8"));
 
     }

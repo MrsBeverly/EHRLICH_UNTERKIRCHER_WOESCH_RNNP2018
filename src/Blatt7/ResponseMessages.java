@@ -4,7 +4,7 @@ public class ResponseMessages {
 
 
      static String newLine="\r\n";
-     static String messageTypeHTML ="Content-Type: text\\html";
+     static String contentTypeHTML ="Content-Type: text\\html";
 
 
 
