@@ -75,7 +75,39 @@ public class HTTPServer_UE7_2 extends Thread {
         }
     }
 
+
+
+    private void GETActions(DataOutputStream outToClient, BufferedReader inFromClient,String s) throws IOException {
+
+        /*
+         * Manages and distinguishes different GET requests
+         * */
+
+        List<String> headers = getHeaders(inFromClient);
+        setStayAlive(headers);
+
+        if (s.equals("/")) {
+            getHTMLFile(outToClient, path2DocumentRoot + "/index.html");
+        } else if (s.endsWith(".png")) {
+            getFile(path2DocumentRoot + s, "gif", outToClient);
+        } else if (s.endsWith(".gif")) {
+            getFile(path2DocumentRoot + s, "png", outToClient);
+        } else if (s.endsWith(".jpg")) {
+            getFile(path2DocumentRoot + s, "jpg", outToClient);
+        } else if (s.endsWith("favicon.ico")) {
+            getFile(path2DocumentRoot + "/favicon" + s, "ico", outToClient);
+        } else if (s.endsWith(".html")) {
+            getHTMLFile(outToClient, path2DocumentRoot + s);
+        }
+    }
+
     private void POSTActions(DataOutputStream outToClient, BufferedReader inFromClient) throws IOException {
+
+        /*
+         * reads posted information, filters content and returns it to a new html form.
+         * */
+
+
         //get headers
         List<String> headers = getHeaders(inFromClient);
 
@@ -132,6 +164,11 @@ public class HTTPServer_UE7_2 extends Thread {
     }
 
     private StringTokenizer getOneHeader(List<String> headers, String want) {
+
+        /*
+        * Finds the header you searched for out of a list of headers.
+        * */
+
         for (String i : headers) {
             if (i.startsWith(want)) {
                 return new StringTokenizer(i);
@@ -141,6 +178,11 @@ public class HTTPServer_UE7_2 extends Thread {
     }
 
     private List<String> getHeaders(BufferedReader inFromClient) throws IOException {
+
+        /*
+        * Reads all headers out og the message and writes them into a list.
+        * */
+
         List<String> in = new LinkedList<String>();
         boolean flag = false;
         //read until ""
@@ -153,26 +195,6 @@ public class HTTPServer_UE7_2 extends Thread {
             }
         }
         return in;
-    }
-
-    private void GETActions(DataOutputStream outToClient, BufferedReader inFromClient,String s) throws IOException {
-
-        List<String> headers = getHeaders(inFromClient);
-        setStayAlive(headers);
-
-        if (s.equals("/")) {
-            getHTMLFile(outToClient, path2DocumentRoot + "/index.html");
-        } else if (s.endsWith(".png")) {
-            getFile(path2DocumentRoot + s, "gif", outToClient);
-        } else if (s.endsWith(".gif")) {
-            getFile(path2DocumentRoot + s, "png", outToClient);
-        } else if (s.endsWith(".jpg")) {
-            getFile(path2DocumentRoot + s, "jpg", outToClient);
-        } else if (s.endsWith("favicon.ico")) {
-            getFile(path2DocumentRoot + "/favicon" + s, "ico", outToClient);
-        } else if (s.endsWith(".html")) {
-            getHTMLFile(outToClient, path2DocumentRoot + s);
-        }
     }
 
     private void getHTMLFile(DataOutputStream outToClient, String path2Get) throws IOException {
